@@ -1,4 +1,6 @@
 package pizzeria_package;
 
-public class Size {
-}
+public enum Size {
+    SMALL,
+    MEDIUM,
+    LARGE;}
