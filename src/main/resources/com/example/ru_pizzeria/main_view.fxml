@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.ru_pizzeria.MainViewController">
+    <Button text="New Order" fx:id="newOrderButton" />
+    <Button text="Order List" fx:id="manageOrdersButton" />
+</VBox>
