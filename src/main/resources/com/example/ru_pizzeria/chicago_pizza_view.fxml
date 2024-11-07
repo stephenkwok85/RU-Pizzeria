@@ -12,21 +12,26 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.ToggleGroup?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ru_pizzeria.ChicagoPizzaViewController">
     <children>
         <Label layoutX="169.0" layoutY="14.0" prefHeight="64.0" prefWidth="276.0" text="Chicago Style">
             <font>
                 <Font size="44.0" />
             </font>
         </Label>
-        <ChoiceBox fx:id="choose_tpye" layoutX="114.0" layoutY="94.0" prefWidth="150.0" />
+        <ChoiceBox fx:id="choose_type" layoutX="114.0" layoutY="94.0" prefWidth="150.0" />
         <Label layoutX="34.0" layoutY="94.0" prefHeight="22.0" prefWidth="74.0" text="Choose Type" />
         <Label layoutX="48.0" layoutY="159.0" prefHeight="22.0" prefWidth="33.0" text="Crust" />
         <ImageView fitHeight="209.0" fitWidth="249.0" layoutX="307.0" layoutY="122.0" pickOnBounds="true" preserveRatio="true">
         </ImageView>
-        <RadioButton fx:id="s_size" layoutX="114.0" layoutY="133.0" mnemonicParsing="false" text="S" />
-        <RadioButton fx:id="l_size" layoutX="236.0" layoutY="133.0" mnemonicParsing="false" text="L" />
-        <RadioButton fx:id="m_size" layoutX="175.0" layoutY="133.0" mnemonicParsing="false" text="M" />
+        <RadioButton fx:id="s_size" layoutX="114.0" layoutY="133.0" mnemonicParsing="false" text="S">
+            <toggleGroup>
+                <ToggleGroup fx:id="sizeGroup" />
+            </toggleGroup>
+        </RadioButton>
+        <RadioButton fx:id="m_size" layoutX="175.0" layoutY="133.0" mnemonicParsing="false" text="M" toggleGroup="$sizeGroup" />
+        <RadioButton fx:id="l_size" layoutX="236.0" layoutY="133.0" mnemonicParsing="false" text="L" toggleGroup="$sizeGroup" />
         <Label layoutX="51.0" layoutY="130.0" prefHeight="22.0" prefWidth="27.0" text="Size" />
         <Label layoutX="122.0" layoutY="197.0" prefHeight="22.0" prefWidth="95.0" text="Selecte Toppings" />
         <GridPane layoutX="51.0" layoutY="219.0" prefHeight="273.0" prefWidth="249.0">
@@ -60,9 +65,9 @@
                 <RadioButton fx:id="BACON" mnemonicParsing="false" text="BACON" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             </children>
         </GridPane>
-        <Button fx:id="add_order_button" layoutX="362.0" layoutY="439.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="114.0" text="Add to Order" />
+        <Button fx:id="add_order_button" layoutX="362.0" layoutY="439.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="114.0" text="Add to Order" onAction="#addOrder" />
         <Label layoutX="314.0" layoutY="391.0" prefHeight="22.0" prefWidth="80.0" text="Pizza Price: $" />
         <TextField fx:id="pizza_price" layoutX="388.0" layoutY="391.0" />
-      <ChoiceBox fx:id="choose_crust" layoutX="114.0" layoutY="159.0" prefHeight="22.0" prefWidth="150.0" />
+        <TextField fx:id="crustField" layoutX="114.0" layoutY="159.0" prefHeight="22.0" prefWidth="150.0" editable="false" />
     </children>
 </Pane>
