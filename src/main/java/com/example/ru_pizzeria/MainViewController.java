@@ -3,9 +3,12 @@ package com.example.ru_pizzeria;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import java.io.IOException;
+import javafx.scene.image.ImageView;
+
 
 public class MainViewController {
 
@@ -22,15 +25,49 @@ public class MainViewController {
     private Button chicago_button;
 
     @FXML
+    private ImageView nyPizzaImage;
+    @FXML
+    private ImageView nyPizzaButtonImage;
+
+    @FXML
+    private ImageView chicagoPizzaButtonImage;
+
+    @FXML
+    private ImageView ordersPlacedImage;
+    @FXML
+    private ImageView currentOrderImage;
+
+    @FXML
     public void initialize() {
-        order_placed_button.setOnAction(event -> openOrderView());
-        current_order_button.setOnAction(event -> openManageOrdersView());
+        Image chicagoImage = new Image(getClass().getResourceAsStream("/images/chicago_pizza.png"));
+        chicagoPizzaButtonImage.setImage(chicagoImage);
+        chicago_button.setGraphic(chicagoPizzaButtonImage);
+
+        Image nyImage = new Image(getClass().getResourceAsStream("/images/ny_pizza.png"));
+        nyPizzaButtonImage.setImage(nyImage);
+        ny_button.setGraphic(nyPizzaButtonImage);
+
+        Image ordersPlaced = new Image(getClass().getResourceAsStream("/images/orders_placed.png"));
+        ImageView ordersPlacedView = new ImageView(ordersPlaced);
+        ordersPlacedView.setFitWidth(278.0);
+        ordersPlacedView.setFitHeight(250.0);
+        ordersPlacedView.setPreserveRatio(false);
+        order_placed_button.setGraphic(ordersPlacedView);
+
+        Image currentOrder = new Image(getClass().getResourceAsStream("/images/current_order.png"));
+        ImageView currentOrderView = new ImageView(currentOrder);
+        currentOrderView.setFitWidth(278.0);
+        currentOrderView.setFitHeight(250.0);
+        currentOrderView.setPreserveRatio(false);
+        current_order_button.setGraphic(currentOrderView);
+
         chicago_button.setOnAction(event -> openChicagoPizzaView());
         ny_button.setOnAction(event -> openNyPizzaView());
-
+        order_placed_button.setOnAction(event -> openOrderView());
+        current_order_button.setOnAction(event -> openManageOrdersView());
     }
 
-    private void openChicagoPizzaView() {   // Chicago style pizza order menu
+    private void openChicagoPizzaView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("chicago_pizza_view.fxml"));
             Stage stage = new Stage();
@@ -42,7 +79,7 @@ public class MainViewController {
         }
     }
 
-    private void openNyPizzaView() {   // NY style pizza order menu
+    private void openNyPizzaView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ny_pizza_view.fxml"));
             Stage stage = new Stage();
@@ -54,7 +91,7 @@ public class MainViewController {
         }
     }
 
-    private void openManageOrdersView() {  // Menu to check placed order
+    private void openManageOrdersView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("current_order_view.fxml"));
             Stage stage = new Stage();
@@ -66,7 +103,7 @@ public class MainViewController {
         }
     }
 
-    private void openOrderView() {   // Current order menu to place order
+    private void openOrderView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("placed_order_view.fxml"));
             Stage stage = new Stage();
@@ -77,6 +114,4 @@ public class MainViewController {
             e.printStackTrace();
         }
     }
-
-
 }
