@@ -1,75 +1,49 @@
 package com.example.ru_pizzeria;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
+import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 
 public class ChicagoPizzaViewController {
 
     @FXML
-    private ComboBox<String> styleComboBox;
+    private ComboBox<String> typeComboBox; // 피자 종류 선택 (Deluxe, BBQ Chicken, Meatzza, Build Your Own)
 
     @FXML
-    private ComboBox<String> typeComboBox;
+    private ComboBox<String> sizeComboBox; // 피자 크기 선택 (Small, Medium, Large)
 
     @FXML
-    private ComboBox<String> sizeComboBox;
+    private RadioButton deepDishRadio; // Deep Dish 크러스트 선택
+    @FXML
+    private RadioButton panRadio; // Pan 크러스트 선택
+    @FXML
+    private ToggleGroup crustGroup; // 라디오 버튼 그룹
 
     @FXML
-    private VBox toppingCheckBoxes;
+    private ListView<String> toppingsListView; // 토핑 선택 리스트
 
-    @FXML
-    private Label priceLabel;
+    // 선택된 피자의 type, size, crust, toppings을 가져오는 메서드
+    public void submitPizzaSelection() {
+        // Type 선택
+        String selectedType = typeComboBox.getValue();
 
-    @FXML
-    private Button addPizzaButton;
+        // Size 선택
+        String selectedSize = sizeComboBox.getValue();
 
-    @FXML
-    private Button cancelButton;
+        // Crust 선택
+        RadioButton selectedCrustButton = (RadioButton) crustGroup.getSelectedToggle();
+        String selectedCrust = selectedCrustButton.getText();
 
-    private ObservableList<CheckBox> toppings;
+        // Toppings 선택
+        ObservableList<String> selectedToppings = toppingsListView.getSelectionModel().getSelectedItems();
 
-    @FXML
-    public void initialize() {
-        styleComboBox.setItems(FXCollections.observableArrayList("Chicago", "New York"));
-        typeComboBox.setItems(FXCollections.observableArrayList("Deluxe", "BBQ Chicken", "Meatzza", "Build Your Own"));
-        sizeComboBox.setItems(FXCollections.observableArrayList("Small", "Medium", "Large"));
-
-        toppings = FXCollections.observableArrayList(
-                new CheckBox("Sausage"),
-                new CheckBox("Pepperoni"),
-                new CheckBox("Green Pepper"),
-                new CheckBox("Onion"),
-                new CheckBox("Mushroom"),
-                new CheckBox("BBQ Chicken"),
-                new CheckBox("Cheddar"),
-                new CheckBox("Provolone")
-        );
-
-        toppingCheckBoxes.getChildren().addAll(toppings);
-
-        addPizzaButton.setOnAction(event -> addPizza());
-        cancelButton.setOnAction(event -> cancel());
-    }
-
-    private void addPizza() {
-        double basePrice = 8.99;
-        int selectedToppings = (int) toppings.stream().filter(CheckBox::isSelected).count();
-        double totalPrice = basePrice + selectedToppings * 1.69;
-        priceLabel.setText(String.format("$%.2f", totalPrice));
-
-        // Order logic here
-
-        System.out.println("Pizza Added!");
-    }
-
-    private void cancel() {
-        // cancel logic here
-        System.out.println("Order Canceled.");
+        // 결과를 출력하거나 다른 처리를 할 수 있습니다
+        System.out.println("Selected Type: " + selectedType);
+        System.out.println("Selected Size: " + selectedSize);
+        System.out.println("Selected Crust: " + selectedCrust);
+        System.out.println("Selected Toppings: " + selectedToppings);
     }
 }
