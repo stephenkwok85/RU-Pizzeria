@@ -30,44 +30,53 @@ public class MainViewController {
 
     }
 
-    private void openChicagoPizzaView() {   // Pizza order menu for Chicago style
+    private void openChicagoPizzaView() {   // Chicago style pizza order menu
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/chicago_pizza_view.fxml"));
-            Stage stage = (Stage) chicago_button.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("chicago_pizza_view.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Chicago Style Pizza Order");
             stage.setScene(new Scene(loader.load()));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void openNyPizzaView() {   // Pizza order menu for NY style
+    private void openNyPizzaView() {   // NY style pizza order menu
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ny_pizza_view.fxml"));
-            Stage stage = (Stage) ny_button.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ny_pizza_view.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("NY Style Pizza Order");
             stage.setScene(new Scene(loader.load()));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void openOrderView() {  // Menu to check placed order
+    private void openManageOrdersView() {  // Menu to check placed order
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/current_order_view.fxml"));
-            Stage stage = (Stage) order_placed_button.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("current_order_view.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Current Order");
             stage.setScene(new Scene(loader.load()));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void openManageOrdersView() {   // Current order menu to place order
+    private void openOrderView() {   // Current order menu to place order
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/chicago_pizza_view.fxml"));
-            Stage stage = (Stage) current_order_button.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("placed_order_view.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Manage Orders");
             stage.setScene(new Scene(loader.load()));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
 }
