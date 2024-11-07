@@ -1,8 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.VBox?>
 
-<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.ru_pizzeria.MainViewController">
-    <Button text="New Order" fx:id="newOrderButton" />
-    <Button text="Order List" fx:id="manageOrdersButton" />
-</VBox>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ru_pizzeria.MainViewController">
+   <children>
+      <GridPane alignment="CENTER" hgap="10" layoutY="111.0" prefHeight="577.0" prefWidth="700.0" vgap="10">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="225.0" minHeight="10.0" prefHeight="225.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="90.0" minHeight="0.0" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="225.0" minHeight="10.0" prefHeight="225.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="90.0" minHeight="0.0" prefHeight="50.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <ImageView fx:id="chicagoPizzaImage" fitHeight="222.0" fitWidth="244.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <image>
+                  <Image url="@../../../images/chicago_pizza.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="chicago_button" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="278.0" text="Chicago Style Pizza" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+
+            <ImageView fx:id="chicagoPizzaImage1" fitHeight="214.0" fitWidth="241.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <image>
+                  <Image url="@../../../images/ny_pizza.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="ny_button" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="278.0" text="NY Style Pizza" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+
+            <ImageView fx:id="chicagoPizzaImage2" fitHeight="222.0" fitWidth="278.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <image>
+                  <Image url="@../../../images/orders_placed.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="order_placed_button" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="278.0" text="Orders Placed" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+
+            <ImageView fx:id="chicagoPizzaImage3" fitHeight="222.0" fitWidth="278.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <image>
+                  <Image url="@../../../images/current_order.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="current_order_button" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="278.0" text="Current Order" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
+      <Label alignment="CENTER" layoutX="11.0" layoutY="14.0" prefHeight="88.0" prefWidth="638.0" text="RU Pizza main menu" textAlignment="CENTER" textFill="#832929" textOverrun="LEADING_WORD_ELLIPSIS">
+         <font>
+            <Font name="Script MT Bold" size="56.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>
