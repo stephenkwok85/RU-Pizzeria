@@ -40,7 +40,6 @@ public class ChicagoPizzaViewController {
     private boolean isCustomizable = false;
     private int selectedToppingsCount = 0;
     private final int MAX_TOPPINGS = 7;
-    private static int orderCounter = 1;
 
     @FXML
     public void initialize() {
@@ -201,7 +200,7 @@ public class ChicagoPizzaViewController {
     @FXML
     private void addOrder() {
         Pizza pizza = null;
-        PizzaFactory pizzaFactory = new ChicagoPizza(); 
+        PizzaFactory pizzaFactory = new ChicagoPizza();
 
         switch (choose_type.getValue()) {
             case "Deluxe":
@@ -215,7 +214,7 @@ public class ChicagoPizzaViewController {
                 break;
             case "Build Your Own":
                 pizza = pizzaFactory.createBuildYourOwn();
-                addCustomToppings((BuildYourOwn) pizza); 
+                addCustomToppings((BuildYourOwn) pizza);
                 break;
         }
 
@@ -238,18 +237,18 @@ public class ChicagoPizzaViewController {
                 throw new IllegalStateException("Unexpected size: " + selectedSize);
         }
 
+        int orderNumber = OrderManager.getNextOrderNumber();
+
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Order Confirmation");
-        alert.setHeaderText(null);
-        alert.setContentText("Your pizza is added. Order number: " + orderCounter);
+        alert.setHeaderText("Order #" + orderNumber);
+        alert.setContentText("Your pizza is added.");
         alert.showAndWait();
 
-        // Get details from the pizza object
         String selectedType = choose_type.getValue();
         String selectedCrust = pizza.getCrust().toString();
         double totalPrice = pizza.price();
 
-        // Collect selected toppings
         StringBuilder selectedToppings = new StringBuilder();
         for (Topping topping : pizza.getToppings()) {
             selectedToppings.append(topping.toString()).append(", ");
@@ -258,17 +257,14 @@ public class ChicagoPizzaViewController {
             selectedToppings.setLength(selectedToppings.length() - 2); // Remove trailing comma
         }
 
-        // Display order details - REMOVE BEFORE SUBMITTING
+        System.out.println("Order #" + orderNumber);
         System.out.println("Pizza Order Details:");
-        System.out.println("Order Number: " + orderCounter);  // Added order number
         System.out.println("Type: " + selectedType);
         System.out.println("Size: " + selectedSize);
         System.out.println("Crust: " + selectedCrust);
         System.out.println("Toppings: " + selectedToppings);
         System.out.println("Price: $" + totalPrice);
         System.out.println("================================");
-
-        orderCounter++;
     }
 
     private void addCustomToppings(BuildYourOwn pizza) {
