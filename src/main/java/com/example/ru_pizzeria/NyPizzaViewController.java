@@ -9,6 +9,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ChoiceBox;
+import pizzeria_package.*;
 
 public class NyPizzaViewController {
 
@@ -192,45 +193,92 @@ public class NyPizzaViewController {
 
     @FXML
     private void addOrder() {
+        Pizza pizza = null;
+        PizzaFactory pizzaFactory = new NYPizza();
+
+        switch (choose_type.getValue()) {
+            case "Deluxe":
+                pizza = pizzaFactory.createDeluxe();
+                break;
+            case "BBQ Chicken":
+                pizza = pizzaFactory.createBBQChicken();
+                break;
+            case "Meatzza":
+                pizza = pizzaFactory.createMeatzza();
+                break;
+            case "Build Your Own":
+                pizza = pizzaFactory.createBuildYourOwn();
+                addCustomToppings((BuildYourOwn) pizza);
+                break;
+        }
+
+        String selectedSize = ((RadioButton) sizeGroup.getSelectedToggle()).getText();
+
+        switch (selectedSize) {
+            case "S":
+            case "Small":
+                pizza.setSize(Size.SMALL);
+                break;
+            case "M":
+            case "Medium":
+                pizza.setSize(Size.MEDIUM);
+                break;
+            case "L":
+            case "Large":
+                pizza.setSize(Size.LARGE);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected size: " + selectedSize);
+        }
+
+        int orderNumber = OrderManager.getNextOrderNumber();
+
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Order Confirmation");
-        alert.setHeaderText(null);
-        alert.setContentText("Your pizza is added");
+        alert.setHeaderText("Order #" + orderNumber);
+        alert.setContentText("Your pizza is added.");
         alert.showAndWait();
 
         String selectedType = choose_type.getValue();
-        String selectedSize = ((RadioButton) sizeGroup.getSelectedToggle()).getText();
-        String selectedCrust = crustField.getText();
-        double totalPrice = Double.parseDouble(pizza_price.getText());
+        String selectedCrust = pizza.getCrust().toString();
+        double totalPrice = pizza.price();
 
         StringBuilder selectedToppings = new StringBuilder();
-        if (SAUSAGE.isSelected()) selectedToppings.append("Sausage, ");
-        if (PEPPERONI.isSelected()) selectedToppings.append("Pepperoni, ");
-        if (GREEN_PEPPER.isSelected()) selectedToppings.append("Green Pepper, ");
-        if (ONION.isSelected()) selectedToppings.append("Onion, ");
-        if (MUSHROOM.isSelected()) selectedToppings.append("Mushroom, ");
-        if (BBQ_CHICKEN.isSelected()) selectedToppings.append("BBQ Chicken, ");
-        if (BEEF.isSelected()) selectedToppings.append("Beef, ");
-        if (HAM.isSelected()) selectedToppings.append("Ham, ");
-        if (PROVOLONE.isSelected()) selectedToppings.append("Provolone, ");
-        if (CHEDDAR.isSelected()) selectedToppings.append("Cheddar, ");
-        if (OLIVES.isSelected()) selectedToppings.append("Olives, ");
-        if (SPINACH.isSelected()) selectedToppings.append("Spinach, ");
-        if (PINEAPPLE.isSelected()) selectedToppings.append("Pineapple, ");
-        if (BACON.isSelected()) selectedToppings.append("Bacon, ");
+        for (Topping topping : pizza.getToppings()) {
+            selectedToppings.append(topping.toString()).append(", ");
+        }
         if (selectedToppings.length() > 0) {
-            selectedToppings.setLength(selectedToppings.length() - 2);
+            selectedToppings.setLength(selectedToppings.length() - 2); // Remove trailing comma
         }
 
-        //int orderNumber = generateOrderNumber();
-
-        System.out.println("NY Order Details:");
+        System.out.println("Order #" + orderNumber);
+        System.out.println("Pizza Order Details:");
         System.out.println("Type: " + selectedType);
         System.out.println("Size: " + selectedSize);
         System.out.println("Crust: " + selectedCrust);
         System.out.println("Toppings: " + selectedToppings);
         System.out.println("Price: $" + totalPrice);
-        //System.out.println("Order Number: " + orderNumber);
         System.out.println("================================");
+    }
+
+    private void addCustomToppings(BuildYourOwn pizza) {
+        if (SAUSAGE.isSelected()) pizza.addTopping(Topping.SAUSAGE);
+        if (PEPPERONI.isSelected()) pizza.addTopping(Topping.PEPPERONI);
+        if (GREEN_PEPPER.isSelected()) pizza.addTopping(Topping.GREEN_PEPPER);
+        if (ONION.isSelected()) pizza.addTopping(Topping.ONION);
+        if (MUSHROOM.isSelected()) pizza.addTopping(Topping.MUSHROOM);
+        if (BBQ_CHICKEN.isSelected()) pizza.addTopping(Topping.BBQ_CHICKEN);
+        if (BEEF.isSelected()) pizza.addTopping(Topping.BEEF);
+        if (HAM.isSelected()) pizza.addTopping(Topping.HAM);
+        if (PROVOLONE.isSelected()) pizza.addTopping(Topping.PROVOLONE);
+        if (CHEDDAR.isSelected()) pizza.addTopping(Topping.CHEDDAR);
+        if (OLIVES.isSelected()) pizza.addTopping(Topping.OLIVES);
+        if (SPINACH.isSelected()) pizza.addTopping(Topping.SPINACH);
+        if (PINEAPPLE.isSelected()) pizza.addTopping(Topping.PINEAPPLE);
+        if (BACON.isSelected()) pizza.addTopping(Topping.BACON);
+
+        if (pizza.getToppings().size() > 7) {
+            pizza.removeTopping(pizza.getToppings().get(7));
+        }
     }
 }
