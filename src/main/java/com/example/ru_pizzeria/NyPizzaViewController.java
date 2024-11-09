@@ -232,6 +232,7 @@ public class NyPizzaViewController {
         }
 
         int orderNumber = OrderManager.getNextOrderNumber();
+        OrderManager.addOrder(pizza);
 
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Order Confirmation");
