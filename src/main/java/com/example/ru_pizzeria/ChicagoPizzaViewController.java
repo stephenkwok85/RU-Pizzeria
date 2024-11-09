@@ -222,22 +222,22 @@ public class ChicagoPizzaViewController {
 
         switch (selectedSize) {
             case "S":
-            case "Small":
                 pizza.setSize(Size.SMALL);
                 break;
             case "M":
-            case "Medium":
                 pizza.setSize(Size.MEDIUM);
                 break;
             case "L":
-            case "Large":
                 pizza.setSize(Size.LARGE);
                 break;
             default:
                 throw new IllegalStateException("Unexpected size: " + selectedSize);
         }
 
-        int orderNumber = OrderManager.getNextOrderNumber();
+        int orderNumber = OrderManager.getNextOrderNumber();  // Get the next available order number
+
+        // Add the pizza to the OrderManager
+        OrderManager.addOrder(pizza);
 
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Order Confirmation");
@@ -245,6 +245,7 @@ public class ChicagoPizzaViewController {
         alert.setContentText("Your pizza is added.");
         alert.showAndWait();
 
+        // Log the details of the order
         String selectedType = choose_type.getValue();
         String selectedCrust = pizza.getCrust().toString();
         double totalPrice = pizza.price();
