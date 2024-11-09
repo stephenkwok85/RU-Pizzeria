@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ru_pizzeria.OrderViewController">
    <children>
       <TextField fx:id="order_num_selection" layoutX="314.0" layoutY="67.0" prefHeight="22.0" prefWidth="40.0" />
       <Label layoutX="217.0" layoutY="66.0" prefHeight="22.0" prefWidth="83.0" text="Order Number" />
@@ -27,5 +26,7 @@
       <Button fx:id="order_place_button" layoutX="220.0" layoutY="348.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="184.0" text="Order Place" />
       <Button layoutX="433.0" layoutY="316.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="125.0" text="Remove Pizza" />
       <Button layoutX="433.0" layoutY="348.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="125.0" text="Clear All Order" />
+      <!-- Search Order Button with onAction event -->
+      <Button fx:id="searchOrderButton" layoutX="364.0" layoutY="67.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="80.0" text="Search Order" onAction="#searchOrder"/>
    </children>
 </Pane>
