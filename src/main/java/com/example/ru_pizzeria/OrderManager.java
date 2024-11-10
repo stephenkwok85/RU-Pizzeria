@@ -47,4 +47,16 @@ public class OrderManager {
     public static int getNextOrderNumber() {
         return nextOrderNumber;
     }
+
+    // Method to delete an order
+    public static boolean deleteOrder(int orderNumber) {
+        System.out.println("Deleting Order #" + orderNumber);
+        if (orders.containsKey(orderNumber)) {
+            orders.remove(orderNumber);  // Remove the order from the map
+            System.out.println("Order #" + orderNumber + " has been deleted.");
+            return true;
+        }
+        System.out.println("Order #" + orderNumber + " not found in the orders.");
+        return false;
+    }
 }

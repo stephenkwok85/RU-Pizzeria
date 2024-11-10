@@ -27,6 +27,8 @@ public class OrderViewController {
     private TextField tax_order;
     @FXML
     private TextField order_total;
+    @FXML
+    private Button clear_all_order;
 
     private ObservableList<String> pizzaDetailsList = FXCollections.observableArrayList();  // List to hold pizza details
 
@@ -121,5 +123,33 @@ public class OrderViewController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void clearAllOrders() {
+        try {
+            // Get the order number from the search field
+            int orderNum = Integer.parseInt(order_num_selection.getText());
+            System.out.println("Attempting to clear Order #" + orderNum);
+
+            // Delete the order from OrderManager
+            boolean isDeleted = OrderManager.deleteOrder(orderNum);
+
+            if (isDeleted) {
+                System.out.println("Order #" + orderNum + " successfully cleared.");
+                showAlert("Order Cleared", "Order #" + orderNum + " has been cleared.");
+                // Clear the UI components
+                current_order_list.getItems().clear();  // Clear the ListView
+                subtotal_order.clear();
+                tax_order.clear();
+                order_total.clear();
+            } else {
+                System.out.println("Order #" + orderNum + " not found.");
+                showAlert("Error", "Order #" + orderNum + " not found.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input for order number: " + order_num_selection.getText());
+            showAlert("Invalid Input", "Please enter a valid order number to clear.");
+        }
     }
 }
