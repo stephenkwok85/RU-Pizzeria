@@ -231,35 +231,24 @@ public class NyPizzaViewController {
                 throw new IllegalStateException("Unexpected size: " + selectedSize);
         }
 
-        int orderNumber = OrderManager.getNextOrderNumber();
-        OrderManager.addOrder(pizza);
+        // Add pizza to the current order
+        OrderManager.addOrderToCurrentOrder(pizza);
 
+        // Provide feedback to the user
+        int orderNumber = OrderManager.getCurrentOrderNumber();
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Order Confirmation");
         alert.setHeaderText("Order #" + orderNumber);
         alert.setContentText("Your pizza is added.");
         alert.showAndWait();
 
-        String selectedType = choose_type.getValue();
-        String selectedCrust = pizza.getCrust().toString();
-        double totalPrice = pizza.price();
-
-        StringBuilder selectedToppings = new StringBuilder();
-        for (Topping topping : pizza.getToppings()) {
-            selectedToppings.append(topping.toString()).append(", ");
-        }
-        if (selectedToppings.length() > 0) {
-            selectedToppings.setLength(selectedToppings.length() - 2); // Remove trailing comma
-        }
-
+        // Print the details of the current order to the console
         System.out.println("Order #" + orderNumber);
         System.out.println("Pizza Order Details:");
-        System.out.println("Type: " + selectedType);
+        System.out.println("Type: " + choose_type.getValue());
         System.out.println("Size: " + selectedSize);
-        System.out.println("Crust: " + selectedCrust);
-        System.out.println("Toppings: " + selectedToppings);
-        System.out.println("Price: $" + totalPrice);
-        System.out.println("================================");
+        System.out.println("Crust: " + pizza.getCrust().toString());
+        System.out.println("Price: $" + pizza.price());
     }
 
     private void addCustomToppings(BuildYourOwn pizza) {

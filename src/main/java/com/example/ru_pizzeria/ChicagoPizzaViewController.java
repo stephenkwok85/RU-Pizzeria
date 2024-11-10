@@ -202,6 +202,7 @@ public class ChicagoPizzaViewController {
         Pizza pizza = null;
         PizzaFactory pizzaFactory = new ChicagoPizza();
 
+        // Create the pizza based on the selected type
         switch (choose_type.getValue()) {
             case "Deluxe":
                 pizza = pizzaFactory.createDeluxe();
@@ -218,54 +219,44 @@ public class ChicagoPizzaViewController {
                 break;
         }
 
+        // Get selected size and set the size for the pizza
         String selectedSize = ((RadioButton) sizeGroup.getSelectedToggle()).getText();
 
         switch (selectedSize) {
             case "S":
+            case "Small":
                 pizza.setSize(Size.SMALL);
                 break;
             case "M":
+            case "Medium":
                 pizza.setSize(Size.MEDIUM);
                 break;
             case "L":
+            case "Large":
                 pizza.setSize(Size.LARGE);
                 break;
             default:
                 throw new IllegalStateException("Unexpected size: " + selectedSize);
         }
 
-        int orderNumber = OrderManager.getNextOrderNumber();  // Get the next available order number
+        // Add pizza to the current order using OrderManager
+        OrderManager.addOrderToCurrentOrder(pizza);
 
-        // Add the pizza to the OrderManager
-        OrderManager.addOrder(pizza);
-
+        // Provide feedback to the user that the pizza has been added to the order
+        int orderNumber = OrderManager.getCurrentOrderNumber();
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Order Confirmation");
         alert.setHeaderText("Order #" + orderNumber);
-        alert.setContentText("Your pizza is added.");
+        alert.setContentText("Your pizza has been added.");
         alert.showAndWait();
 
-        // Log the details of the order
-        String selectedType = choose_type.getValue();
-        String selectedCrust = pizza.getCrust().toString();
-        double totalPrice = pizza.price();
-
-        StringBuilder selectedToppings = new StringBuilder();
-        for (Topping topping : pizza.getToppings()) {
-            selectedToppings.append(topping.toString()).append(", ");
-        }
-        if (selectedToppings.length() > 0) {
-            selectedToppings.setLength(selectedToppings.length() - 2); // Remove trailing comma
-        }
-
+        // Optionally, print the details of the current order to the console
         System.out.println("Order #" + orderNumber);
         System.out.println("Pizza Order Details:");
-        System.out.println("Type: " + selectedType);
+        System.out.println("Type: " + choose_type.getValue());
         System.out.println("Size: " + selectedSize);
-        System.out.println("Crust: " + selectedCrust);
-        System.out.println("Toppings: " + selectedToppings);
-        System.out.println("Price: $" + totalPrice);
-        System.out.println("================================");
+        System.out.println("Crust: " + pizza.getCrust().toString());
+        System.out.println("Price: $" + pizza.price());
     }
 
     private void addCustomToppings(BuildYourOwn pizza) {
