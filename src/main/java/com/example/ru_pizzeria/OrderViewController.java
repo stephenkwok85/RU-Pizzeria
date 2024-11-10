@@ -21,6 +21,12 @@ public class OrderViewController {
     private ListView<String> current_order_list;  // ListView to display order details
     @FXML
     private Button completeOrderButton;  // Button to complete the current order
+    @FXML
+    private TextField subtotal_order;
+    @FXML
+    private TextField tax_order;
+    @FXML
+    private TextField order_total;
 
     private ObservableList<String> pizzaDetailsList = FXCollections.observableArrayList();  // List to hold pizza details
 
@@ -28,37 +34,56 @@ public class OrderViewController {
     private void searchOrder() {
         try {
             int orderNum = Integer.parseInt(order_num_selection.getText());  // Get order number from TextField
-            List<Pizza> pizzas = OrderManager.getOrder(orderNum);  // Retrieve list of pizzas for the given order number
+            List<Pizza> pizzas = OrderManager.getOrder(orderNum);  // Retrieve list of pizzas for this order from OrderManager
 
             // Print to the console to see if the order is retrieved
             System.out.println("Searching for Order #" + orderNum);
+
             if (pizzas != null && !pizzas.isEmpty()) {
-                System.out.println("Order found: " + pizzas.size() + " pizzas");  // Print the number of pizzas in the order
+                System.out.println("Order found: " + pizzas.size() + " pizzas");
 
                 pizzaDetailsList.clear();  // Clear previous details
-                pizzaDetailsList.add("Order #" + orderNum);  // Add order number at the top
+                pizzaDetailsList.add("Order #" + orderNum);  // Add order number
 
-                // Loop through each pizza in the order and add its details
+                // Variable to store the subtotal (total cost)
+                double subtotal = 0.0;
+                StringBuilder toppings = new StringBuilder();
+
+                // Iterate through each pizza in the order
                 for (Pizza pizza : pizzas) {
-                    // Add pizza details to the list
                     pizzaDetailsList.add("Type: " + pizza.getClass().getSimpleName());  // Add pizza type
                     pizzaDetailsList.add("Size: " + pizza.getSize());  // Add pizza size
-                    pizzaDetailsList.add("Crust: " + pizza.getCrust().toString());  // Add crust type
-                    pizzaDetailsList.add("Price: $" + pizza.price());  // Add pizza price
+                    pizzaDetailsList.add("Crust: " + pizza.getCrust().toString());  // Add crust
+                    pizzaDetailsList.add("Price: $" + pizza.price());  // Add price for this pizza
 
-                    // Add toppings details
-                    StringBuilder toppings = new StringBuilder();
+                    // Add toppings
+                    toppings.setLength(0);  // Reset toppings string builder
                     for (Topping topping : pizza.getToppings()) {
                         toppings.append(topping.toString()).append(", ");
                     }
                     if (toppings.length() > 0) {
                         toppings.setLength(toppings.length() - 2);  // Remove trailing comma
                     }
-                    pizzaDetailsList.add("Toppings: " + toppings);
+                    pizzaDetailsList.add("Toppings: " + toppings.toString());
+
+                    // Add the price of this pizza to the subtotal
+                    subtotal += pizza.price();
                 }
 
-                // Update ListView to show the pizza details
+                // Update the ListView with the order details
                 current_order_list.setItems(pizzaDetailsList);
+
+                // Set the subtotal in the TextField (formatted to 2 decimal places)
+                subtotal_order.setText(String.format("%.2f", subtotal));
+
+                // Calculate the tax (6.625%) and set it in the tax_order TextField
+                double tax = subtotal * 0.06625;  // 6.625% tax
+                tax_order.setText(String.format("%.2f", tax));
+
+                // Calculate the total (subtotal + tax) and set it in the order_total TextField
+                double total = subtotal + tax;
+                order_total.setText(String.format("%.2f", total));
+
             } else {
                 System.out.println("Order #" + orderNum + " not found.");  // Print when order is not found
                 showAlert("Error", "Order number not found!");  // Show error if order not found
