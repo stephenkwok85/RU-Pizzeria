@@ -1,26 +1,39 @@
 package com.example.ru_pizzeria;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import pizzeria_package.Pizza;
 import pizzeria_package.Topping;
 
 import java.util.List;
-
+import java.util.stream.Collectors;
 public class OrderViewController {
 
     @FXML
-    private TextField order_num_selection;  // TextField to input order number
+    private TextField order_num_selection;
     @FXML
-    private ListView<String> current_order_list;  // ListView to display order details
+    private TableView<Pizza> current_order_table;
     @FXML
-    private Button completeOrderButton;  // Button to complete the current order
+    private TableColumn<Pizza, Integer> pizzaNumberColumn;
+    @FXML
+    private TableColumn<Pizza, String> pizzaTypeColumn;
+    @FXML
+    private TableColumn<Pizza, String> pizzaSizeColumn;
+    @FXML
+    private TableColumn<Pizza, String> pizzaCrustColumn;
+    @FXML
+    private TableColumn<Pizza, String> pizzaToppingsColumn;
+    @FXML
+    private TableColumn<Pizza, Double> pizzaPriceColumn;
     @FXML
     private TextField subtotal_order;
     @FXML
@@ -28,73 +41,56 @@ public class OrderViewController {
     @FXML
     private TextField order_total;
     @FXML
+    private Button completeOrderButton;
+    @FXML
     private Button clear_all_order;
+    @FXML
+    private Button remove_pizza;
 
-    private ObservableList<String> pizzaDetailsList = FXCollections.observableArrayList();  // List to hold pizza details
+    private ObservableList<Pizza> pizzaDetailsList = FXCollections.observableArrayList();
+
+    @FXML
+    public void initialize() {
+        pizzaNumberColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(current_order_table.getItems().indexOf(cellData.getValue()) + 1));
+        pizzaTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClass().getSimpleName()));
+        pizzaSizeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSize().toString()));
+        pizzaCrustColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCrust().toString()));
+        pizzaToppingsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
+                cellData.getValue().getToppings().stream().map(Topping::toString).collect(Collectors.joining(", "))));
+        pizzaPriceColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().price()));
+
+        current_order_table.setItems(pizzaDetailsList);
+    }
+
 
     @FXML
     private void searchOrder() {
         try {
-            int orderNum = Integer.parseInt(order_num_selection.getText());  // Get order number from TextField
-            List<Pizza> pizzas = OrderManager.getOrder(orderNum);  // Retrieve list of pizzas for this order from OrderManager
-
-            // Print to the console to see if the order is retrieved
-            System.out.println("Searching for Order #" + orderNum);
+            int orderNum = Integer.parseInt(order_num_selection.getText());
+            List<Pizza> pizzas = OrderManager.getOrder(orderNum);
 
             if (pizzas != null && !pizzas.isEmpty()) {
-                System.out.println("Order found: " + pizzas.size() + " pizzas");
+                pizzaDetailsList.clear();
+                pizzaDetailsList.addAll(pizzas);
 
-                pizzaDetailsList.clear();  // Clear previous details
-                pizzaDetailsList.add("Order #" + orderNum);  // Add order number
-
-                // Variable to store the subtotal (total cost)
-                double subtotal = 0.0;
-                StringBuilder toppings = new StringBuilder();
-
-                // Iterate through each pizza in the order
-                for (Pizza pizza : pizzas) {
-                    pizzaDetailsList.add("Type: " + pizza.getClass().getSimpleName());  // Add pizza type
-                    pizzaDetailsList.add("Size: " + pizza.getSize());  // Add pizza size
-                    pizzaDetailsList.add("Crust: " + pizza.getCrust().toString());  // Add crust
-                    pizzaDetailsList.add("Price: $" + pizza.price());  // Add price for this pizza
-
-                    // Add toppings
-                    toppings.setLength(0);  // Reset toppings string builder
-                    for (Topping topping : pizza.getToppings()) {
-                        toppings.append(topping.toString()).append(", ");
-                    }
-                    if (toppings.length() > 0) {
-                        toppings.setLength(toppings.length() - 2);  // Remove trailing comma
-                    }
-                    pizzaDetailsList.add("Toppings: " + toppings.toString());
-
-                    // Add the price of this pizza to the subtotal
-                    subtotal += pizza.price();
-                }
-
-                // Update the ListView with the order details
-                current_order_list.setItems(pizzaDetailsList);
-
-                // Set the subtotal in the TextField (formatted to 2 decimal places)
+                double subtotal = pizzas.stream().mapToDouble(Pizza::price).sum();
                 subtotal_order.setText(String.format("%.2f", subtotal));
 
-                // Calculate the tax (6.625%) and set it in the tax_order TextField
-                double tax = subtotal * 0.06625;  // 6.625% tax
+                double tax = subtotal * 0.06625;
                 tax_order.setText(String.format("%.2f", tax));
 
-                // Calculate the total (subtotal + tax) and set it in the order_total TextField
                 double total = subtotal + tax;
                 order_total.setText(String.format("%.2f", total));
-
             } else {
-                System.out.println("Order #" + orderNum + " not found.");  // Print when order is not found
-                showAlert("Error", "Order number not found!");  // Show error if order not found
+                System.out.println("Order #" + orderNum + " not found.");
+                showAlert("Error", "Order number not found!");
             }
         } catch (NumberFormatException e) {
-            System.out.println("Invalid input: " + order_num_selection.getText());  // Print invalid input value
-            showAlert("Invalid Input", "Please enter a valid order number!");  // Handle invalid input
+            System.out.println("Invalid input: " + order_num_selection.getText());
+            showAlert("Invalid Input", "Please enter a valid order number!");
         }
     }
+
 
     @FXML
     private void completeOrder() {
@@ -114,7 +110,7 @@ public class OrderViewController {
 
         // Optionally, reset any other UI components related to the order
         order_num_selection.clear(); // Clear the order number text field
-        current_order_list.getItems().clear(); // Clear the order list view (if necessary)
+        current_order_table.getItems().clear(); // Clear the order table view (if necessary)
     }
 
     private void showAlert(String title, String content) {
@@ -139,7 +135,7 @@ public class OrderViewController {
                 System.out.println("Order #" + orderNum + " successfully cleared.");
                 showAlert("Order Cleared", "Order #" + orderNum + " has been cleared.");
                 // Clear the UI components
-                current_order_list.getItems().clear();  // Clear the ListView
+                current_order_table.getItems().clear(); // Clear the order table view (if necessary)
                 subtotal_order.clear();
                 tax_order.clear();
                 order_total.clear();
@@ -155,84 +151,22 @@ public class OrderViewController {
 
     @FXML
     private void removePizza() {
-        try {
-            // Get the selected pizza index from the ListView
-            int selectedIndex = current_order_list.getSelectionModel().getSelectedIndex();
+        Pizza selectedPizza = current_order_table.getSelectionModel().getSelectedItem();
+        if (selectedPizza == null) {
+            showAlert("No Selection", "Please select a pizza to remove.");
+            return;
+        }
 
-            // Check if a pizza is selected
-            if (selectedIndex == -1) {
-                showAlert("No Selection", "Please select a pizza to remove.");
-                return; // Exit if no pizza is selected
-            }
+        int orderNum = Integer.parseInt(order_num_selection.getText());
+        List<Pizza> pizzas = OrderManager.getOrder(orderNum);
 
-            // Get the order number from the TextField
-            int orderNum = Integer.parseInt(order_num_selection.getText());
-
-            // Retrieve the list of pizzas for this order
-            List<Pizza> pizzas = OrderManager.getOrder(orderNum);
-
-            if (pizzas != null && !pizzas.isEmpty()) {
-                // Ensure that the selected index is within the valid range
-                if (selectedIndex >= 0 && selectedIndex < pizzas.size()) {
-                    // Remove the selected pizza from the list
-                    pizzas.remove(selectedIndex);
-
-                    // If the order is empty after removal, we can handle it (e.g., reset the order or show a message)
-                    if (pizzas.isEmpty()) {
-                        showAlert("Empty Order", "The order is now empty.");
-                        OrderManager.deleteOrder(orderNum); // Optionally delete the order from OrderManager
-                    } else {
-                        // Update the order in OrderManager with the modified list
-                        OrderManager.updateOrder(orderNum, pizzas);
-                    }
-
-                    // Update the ListView with the updated order details
-                    pizzaDetailsList.clear();  // Clear previous details
-                    pizzaDetailsList.add("Order #" + orderNum);  // Add order number
-
-                    // Recalculate the subtotal, tax, and total after removal
-                    double subtotal = 0.0;
-                    StringBuilder toppings = new StringBuilder();
-                    for (Pizza pizza : pizzas) {
-                        pizzaDetailsList.add("Type: " + pizza.getClass().getSimpleName());  // Add pizza type
-                        pizzaDetailsList.add("Size: " + pizza.getSize());  // Add pizza size
-                        pizzaDetailsList.add("Crust: " + pizza.getCrust().toString());  // Add crust
-                        pizzaDetailsList.add("Price: $" + pizza.price());  // Add price for this pizza
-
-                        // Add toppings
-                        toppings.setLength(0);  // Reset toppings string builder
-                        for (Topping topping : pizza.getToppings()) {
-                            toppings.append(topping.toString()).append(", ");
-                        }
-                        if (toppings.length() > 0) {
-                            toppings.setLength(toppings.length() - 2);  // Remove trailing comma
-                        }
-                        pizzaDetailsList.add("Toppings: " + toppings.toString());
-
-                        // Add the price of this pizza to the subtotal
-                        subtotal += pizza.price();
-                    }
-
-                    // Update the ListView with the updated order details
-                    current_order_list.setItems(pizzaDetailsList);
-
-                    // Update the subtotal, tax, and total fields
-                    subtotal_order.setText(String.format("%.2f", subtotal));
-                    double tax = subtotal * 0.06625;  // 6.625% tax
-                    tax_order.setText(String.format("%.2f", tax));
-                    double total = subtotal + tax;
-                    order_total.setText(String.format("%.2f", total));
-
-                } else {
-                    showAlert("Error", "Order not found or empty.");
-                }
-
-            } else {
-                showAlert("Error", "Order not found.");
-            }
-
-        } catch (NumberFormatException e) {
-            showAlert("Invalid Input", "Please enter a valid order number.");
+        if (pizzas != null && !pizzas.isEmpty()) {
+            pizzas.remove(selectedPizza);
+            OrderManager.updateOrder(orderNum, pizzas);
+            searchOrder(); // Update the TableView with the new list
+        } else {
+            showAlert("Error", "Order not found.");
         }
     }
+
 }
