@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class OrderManager {
     private static final Map<Integer, List<Pizza>> orders = new HashMap<>();
@@ -66,5 +67,9 @@ public class OrderManager {
         } else {
             System.out.println("Order #" + orderNumber + " not found.");
         }
+    }
+
+    public static List<Integer> getAllOrderNumbers() {
+        return new ArrayList<>(orders.keySet());
     }
 }
