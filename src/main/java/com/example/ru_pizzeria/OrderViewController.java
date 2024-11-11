@@ -152,4 +152,87 @@ public class OrderViewController {
             showAlert("Invalid Input", "Please enter a valid order number to clear.");
         }
     }
+
+    @FXML
+    private void removePizza() {
+        try {
+            // Get the selected pizza index from the ListView
+            int selectedIndex = current_order_list.getSelectionModel().getSelectedIndex();
+
+            // Check if a pizza is selected
+            if (selectedIndex == -1) {
+                showAlert("No Selection", "Please select a pizza to remove.");
+                return; // Exit if no pizza is selected
+            }
+
+            // Get the order number from the TextField
+            int orderNum = Integer.parseInt(order_num_selection.getText());
+
+            // Retrieve the list of pizzas for this order
+            List<Pizza> pizzas = OrderManager.getOrder(orderNum);
+
+            if (pizzas != null && !pizzas.isEmpty()) {
+                // Ensure that the selected index is within the valid range
+                if (selectedIndex >= 0 && selectedIndex < pizzas.size()) {
+                    // Remove the selected pizza from the list
+                    pizzas.remove(selectedIndex);
+
+                    // If the order is empty after removal, we can handle it (e.g., reset the order or show a message)
+                    if (pizzas.isEmpty()) {
+                        showAlert("Empty Order", "The order is now empty.");
+                        OrderManager.deleteOrder(orderNum); // Optionally delete the order from OrderManager
+                    } else {
+                        // Update the order in OrderManager with the modified list
+                        OrderManager.updateOrder(orderNum, pizzas);
+                    }
+
+                    // Update the ListView with the updated order details
+                    pizzaDetailsList.clear();  // Clear previous details
+                    pizzaDetailsList.add("Order #" + orderNum);  // Add order number
+
+                    // Recalculate the subtotal, tax, and total after removal
+                    double subtotal = 0.0;
+                    StringBuilder toppings = new StringBuilder();
+                    for (Pizza pizza : pizzas) {
+                        pizzaDetailsList.add("Type: " + pizza.getClass().getSimpleName());  // Add pizza type
+                        pizzaDetailsList.add("Size: " + pizza.getSize());  // Add pizza size
+                        pizzaDetailsList.add("Crust: " + pizza.getCrust().toString());  // Add crust
+                        pizzaDetailsList.add("Price: $" + pizza.price());  // Add price for this pizza
+
+                        // Add toppings
+                        toppings.setLength(0);  // Reset toppings string builder
+                        for (Topping topping : pizza.getToppings()) {
+                            toppings.append(topping.toString()).append(", ");
+                        }
+                        if (toppings.length() > 0) {
+                            toppings.setLength(toppings.length() - 2);  // Remove trailing comma
+                        }
+                        pizzaDetailsList.add("Toppings: " + toppings.toString());
+
+                        // Add the price of this pizza to the subtotal
+                        subtotal += pizza.price();
+                    }
+
+                    // Update the ListView with the updated order details
+                    current_order_list.setItems(pizzaDetailsList);
+
+                    // Update the subtotal, tax, and total fields
+                    subtotal_order.setText(String.format("%.2f", subtotal));
+                    double tax = subtotal * 0.06625;  // 6.625% tax
+                    tax_order.setText(String.format("%.2f", tax));
+                    double total = subtotal + tax;
+                    order_total.setText(String.format("%.2f", total));
+
+                } else {
+                    showAlert("Error", "Order not found or empty.");
+                }
+
+            } else {
+                showAlert("Error", "Order not found.");
+            }
+
+        } catch (NumberFormatException e) {
+            showAlert("Invalid Input", "Please enter a valid order number.");
+        }
+    }
 }

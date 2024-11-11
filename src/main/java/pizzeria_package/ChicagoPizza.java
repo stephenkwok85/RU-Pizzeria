@@ -30,7 +30,6 @@ public class ChicagoPizza implements PizzaFactory{
     public Pizza createBuildYourOwn() {
         Pizza buildYourOwn = new BuildYourOwn();
         buildYourOwn.setCrust(Crust.PAN);
-        // Empty list when initializing b/c topping customizable
         return buildYourOwn;
     }
 }

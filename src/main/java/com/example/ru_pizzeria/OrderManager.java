@@ -59,4 +59,12 @@ public class OrderManager {
         System.out.println("Order #" + orderNumber + " not found in the orders.");
         return false;
     }
+
+    public static void updateOrder(int orderNumber, List<Pizza> updatedPizzas) {
+        if (orders.containsKey(orderNumber)) {
+            orders.put(orderNumber, updatedPizzas);  // Update the order with the new pizza list
+        } else {
+            System.out.println("Order #" + orderNumber + " not found.");
+        }
+    }
 }

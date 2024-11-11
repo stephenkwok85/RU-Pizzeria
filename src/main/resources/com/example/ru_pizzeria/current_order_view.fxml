@@ -16,17 +16,14 @@
             <Font size="33.0" />
          </font>
       </Label>
-      <ListView fx:id="current_order_list" layoutX="25.0" layoutY="100.0" prefHeight="200.0" prefWidth="555.0" />
-      <Label layoutX="33.0" layoutY="316.0" prefHeight="22.0" prefWidth="83.0" text="Subtotal: $" />
+      <ListView fx:id="current_order_list" layoutX="25.0" layoutY="100.0" prefHeight="200.0" prefWidth="555.0" />      <Label layoutX="33.0" layoutY="316.0" prefHeight="22.0" prefWidth="83.0" text="Subtotal: $" />
       <TextField fx:id="subtotal_order" editable="false" layoutX="94.0" layoutY="316.0" prefHeight="22.0" prefWidth="100.0" />
       <Label layoutX="220.0" layoutY="316.0" prefHeight="22.0" prefWidth="83.0" text="Order total: $" />
       <TextField fx:id="order_total" editable="false" layoutX="304.0" layoutY="316.0" prefHeight="22.0" prefWidth="100.0" />
       <Label layoutX="56.0" layoutY="348.0" prefHeight="22.0" prefWidth="83.0" text="Tax: $" />
       <TextField fx:id="tax_order" editable="false" layoutX="94.0" layoutY="348.0" prefHeight="22.0" prefWidth="100.0" />
       <Button fx:id="completeOrderButton" layoutX="220.0" layoutY="348.0" mnemonicParsing="false" onAction="#completeOrder" prefHeight="22.0" prefWidth="184.0" text="Complete Order" />
-      <Button layoutX="433.0" layoutY="316.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="125.0" text="Remove Pizza" />
-      <Button fx:id="clear_all_order" layoutX="433.0" layoutY="348.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="125.0" text="Clear All Order" onAction="#clearAllOrders" />
-      <!-- Search Order Button with onAction event -->
-      <Button fx:id="searchOrderButton" layoutX="364.0" layoutY="67.0" mnemonicParsing="false" onAction="#searchOrder" prefHeight="22.0" prefWidth="80.0" text="Search Order" />
-   </children>
+      <Button fx:id="remove_pizza" layoutX="433.0" layoutY="316.0" mnemonicParsing="false" onAction="#removePizza" prefHeight="22.0" prefWidth="125.0" text="Remove Pizza" />
+      <Button fx:id="clear_all_order" layoutX="433.0" layoutY="348.0" mnemonicParsing="false" onAction="#clearAllOrders" prefHeight="22.0" prefWidth="125.0" text="Clear All Order" />
+      <Button fx:id="searchOrderButton" layoutX="364.0" layoutY="67.0" mnemonicParsing="false" onMouseClicked="#searchOrder" prefHeight="22.0" prefWidth="80.0" text="Search Order" />   </children>
 </Pane>
