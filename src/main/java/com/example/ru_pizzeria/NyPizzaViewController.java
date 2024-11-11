@@ -10,6 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ChoiceBox;
 import pizzeria_package.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class NyPizzaViewController {
 
@@ -31,6 +33,8 @@ public class NyPizzaViewController {
     private TextField pizza_price;
     @FXML
     private Button add_order_button;
+    @FXML
+    private ImageView ny_pic;
 
     private boolean isCustomizable = false;
     private int selectedToppingsCount = 0;
@@ -38,6 +42,7 @@ public class NyPizzaViewController {
 
     @FXML
     public void initialize() {
+        updatePizzaImage("Build Your Own");
         choose_type.setItems(FXCollections.observableArrayList("Deluxe", "BBQ Chicken", "Meatzza", "Build Your Own"));
 
         choose_type.getSelectionModel().select("Build Your Own");
@@ -52,6 +57,7 @@ public class NyPizzaViewController {
             isCustomizable = newValue.equals("Build Your Own");
             lockToppings(!isCustomizable);
             updatePizzaPrice();
+            updatePizzaImage(newValue);
         });
 
         sizeGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> updatePizzaPrice());
@@ -231,24 +237,14 @@ public class NyPizzaViewController {
                 throw new IllegalStateException("Unexpected size: " + selectedSize);
         }
 
-        // Add pizza to the current order
         OrderManager.addOrderToCurrentOrder(pizza);
 
-        // Provide feedback to the user
         int orderNumber = OrderManager.getCurrentOrderNumber();
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Order Confirmation");
         alert.setHeaderText("Order #" + orderNumber);
         alert.setContentText("Your pizza is added.");
         alert.showAndWait();
-
-        // Print the details of the current order to the console
-        System.out.println("Order #" + orderNumber);
-        System.out.println("Pizza Order Details:");
-        System.out.println("Type: " + choose_type.getValue());
-        System.out.println("Size: " + selectedSize);
-        System.out.println("Crust: " + pizza.getCrust().toString());
-        System.out.println("Price: $" + pizza.price());
     }
 
     private void addCustomToppings(BuildYourOwn pizza) {
@@ -271,4 +267,28 @@ public class NyPizzaViewController {
             pizza.removeTopping(pizza.getToppings().get(7));
         }
     }
+
+    private void updatePizzaImage(String pizzaType) {
+        Image image = null;
+        switch (pizzaType) {
+            case "Deluxe":
+                image = new Image(getClass().getResourceAsStream("/images/ny_deluxe.png"));
+                break;
+            case "BBQ Chicken":
+                image = new Image(getClass().getResourceAsStream("/images/ny_bbq.png"));
+                break;
+            case "Meatzza":
+                image = new Image(getClass().getResourceAsStream("/images/ny_meat.png"));
+                break;
+            case "Build Your Own":
+                image = new Image(getClass().getResourceAsStream("/images/ny_build.png"));
+                break;
+        }
+
+        if (image != null) {
+            ny_pic.setImage(image);
+        } else {
+        }
+    }
+
 }

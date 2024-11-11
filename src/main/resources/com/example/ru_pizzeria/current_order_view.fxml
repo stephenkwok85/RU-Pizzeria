@@ -10,8 +10,8 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ru_pizzeria.OrderViewController">
    <children>
-      <TextField fx:id="order_num_selection" layoutX="314.0" layoutY="67.0" prefHeight="22.0" prefWidth="40.0" />
-      <Label layoutX="217.0" layoutY="66.0" prefHeight="22.0" prefWidth="83.0" text="Order Number" />
+      <TextField fx:id="order_num_selection" layoutX="280.0" layoutY="67.0" prefHeight="22.0" prefWidth="40.0" />
+      <Label layoutX="182.0" layoutY="66.0" prefHeight="22.0" prefWidth="83.0" text="Order Number" />
       <Label layoutX="192.0" layoutY="14.0" prefHeight="49.0" prefWidth="216.0" text="Current Order">
          <font>
             <Font size="33.0" />
@@ -20,12 +20,12 @@
 
       <TableView fx:id="current_order_table" layoutX="25.0" layoutY="100.0" prefHeight="200.0" prefWidth="555.0">
          <columns>
-            <TableColumn fx:id="pizzaNumberColumn" text="Number" prefWidth="50.0" />
-            <TableColumn fx:id="pizzaTypeColumn" text="Type" prefWidth="100.0" />
-            <TableColumn fx:id="pizzaSizeColumn" text="Size" prefWidth="100.0" />
-            <TableColumn fx:id="pizzaCrustColumn" text="Crust" prefWidth="100.0" />
-            <TableColumn fx:id="pizzaToppingsColumn" text="Toppings" prefWidth="150.0" />
-            <TableColumn fx:id="pizzaPriceColumn" text="Price" prefWidth="55.0" />
+            <TableColumn fx:id="pizzaNumberColumn" prefWidth="50.0" text="Number" />
+            <TableColumn fx:id="pizzaTypeColumn" prefWidth="100.0" text="Type" />
+            <TableColumn fx:id="pizzaSizeColumn" prefWidth="100.0" text="Size" />
+            <TableColumn fx:id="pizzaCrustColumn" prefWidth="100.0" text="Crust" />
+            <TableColumn fx:id="pizzaToppingsColumn" prefWidth="150.0" text="Toppings" />
+            <TableColumn fx:id="pizzaPriceColumn" prefWidth="55.0" text="Price" />
          </columns>
       </TableView>
 
@@ -38,6 +38,6 @@
       <Button fx:id="completeOrderButton" layoutX="220.0" layoutY="348.0" mnemonicParsing="false" onAction="#completeOrder" prefHeight="22.0" prefWidth="184.0" text="Complete Order" />
       <Button fx:id="remove_pizza" layoutX="433.0" layoutY="316.0" mnemonicParsing="false" onAction="#removePizza" prefHeight="22.0" prefWidth="125.0" text="Remove Pizza" />
       <Button fx:id="clear_all_order" layoutX="433.0" layoutY="348.0" mnemonicParsing="false" onAction="#clearAllOrders" prefHeight="22.0" prefWidth="125.0" text="Clear All Order" />
-      <Button fx:id="searchOrderButton" layoutX="364.0" layoutY="67.0" mnemonicParsing="false" onMouseClicked="#searchOrder" prefHeight="22.0" prefWidth="80.0" text="Search Order" />
+      <Button fx:id="searchOrderButton" layoutX="342.0" layoutY="67.0" mnemonicParsing="false" onMouseClicked="#searchOrder" prefHeight="22.0" prefWidth="125.0" text="Search Order" />
    </children>
 </Pane>

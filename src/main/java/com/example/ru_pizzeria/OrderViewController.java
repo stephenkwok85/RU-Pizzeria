@@ -82,11 +82,9 @@ public class OrderViewController {
                 double total = subtotal + tax;
                 order_total.setText(String.format("%.2f", total));
             } else {
-                System.out.println("Order #" + orderNum + " not found.");
                 showAlert("Error", "Order number not found!");
             }
         } catch (NumberFormatException e) {
-            System.out.println("Invalid input: " + order_num_selection.getText());
             showAlert("Invalid Input", "Please enter a valid order number!");
         }
     }
@@ -126,13 +124,11 @@ public class OrderViewController {
         try {
             // Get the order number from the search field
             int orderNum = Integer.parseInt(order_num_selection.getText());
-            System.out.println("Attempting to clear Order #" + orderNum);
 
             // Delete the order from OrderManager
             boolean isDeleted = OrderManager.deleteOrder(orderNum);
 
             if (isDeleted) {
-                System.out.println("Order #" + orderNum + " successfully cleared.");
                 showAlert("Order Cleared", "Order #" + orderNum + " has been cleared.");
                 // Clear the UI components
                 current_order_table.getItems().clear(); // Clear the order table view (if necessary)
@@ -140,11 +136,9 @@ public class OrderViewController {
                 tax_order.clear();
                 order_total.clear();
             } else {
-                System.out.println("Order #" + orderNum + " not found.");
                 showAlert("Error", "Order #" + orderNum + " not found.");
             }
         } catch (NumberFormatException e) {
-            System.out.println("Invalid input for order number: " + order_num_selection.getText());
             showAlert("Invalid Input", "Please enter a valid order number to clear.");
         }
     }

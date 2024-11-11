@@ -51,13 +51,10 @@ public class OrderManager {
 
     // Method to delete an order
     public static boolean deleteOrder(int orderNumber) {
-        System.out.println("Deleting Order #" + orderNumber);
         if (orders.containsKey(orderNumber)) {
             orders.remove(orderNumber);  // Remove the order from the map
-            System.out.println("Order #" + orderNumber + " has been deleted.");
             return true;
         }
-        System.out.println("Order #" + orderNumber + " not found in the orders.");
         return false;
     }
 
@@ -65,7 +62,6 @@ public class OrderManager {
         if (orders.containsKey(orderNumber)) {
             orders.put(orderNumber, updatedPizzas);  // Update the order with the new pizza list
         } else {
-            System.out.println("Order #" + orderNumber + " not found.");
         }
     }
 

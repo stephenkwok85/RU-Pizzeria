@@ -15,6 +15,8 @@ import pizzeria_package.PizzaFactory;
 import pizzeria_package.BuildYourOwn;
 import pizzeria_package.Topping;
 import pizzeria_package.Size;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class ChicagoPizzaViewController {
 
@@ -36,6 +38,8 @@ public class ChicagoPizzaViewController {
     private TextField pizza_price;
     @FXML
     private Button add_order_button;
+    @FXML
+    private ImageView ch_pic;
 
     private boolean isCustomizable = false;
     private int selectedToppingsCount = 0;
@@ -43,8 +47,8 @@ public class ChicagoPizzaViewController {
 
     @FXML
     public void initialize() {
+        updatePizzaImage("Build Your Own");
         choose_type.setItems(FXCollections.observableArrayList("Deluxe", "BBQ Chicken", "Meatzza", "Build Your Own"));
-
         choose_type.getSelectionModel().select("Build Your Own");
         crustField.setText("Pan");
         crustField.setEditable(false);
@@ -57,6 +61,7 @@ public class ChicagoPizzaViewController {
             isCustomizable = newValue.equals("Build Your Own");
             lockToppings(!isCustomizable);
             updatePizzaPrice();
+            updatePizzaImage(newValue);
         });
 
         sizeGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> updatePizzaPrice());
@@ -202,7 +207,6 @@ public class ChicagoPizzaViewController {
         Pizza pizza = null;
         PizzaFactory pizzaFactory = new ChicagoPizza();
 
-        // Create the pizza based on the selected type
         switch (choose_type.getValue()) {
             case "Deluxe":
                 pizza = pizzaFactory.createDeluxe();
@@ -219,7 +223,6 @@ public class ChicagoPizzaViewController {
                 break;
         }
 
-        // Get selected size and set the size for the pizza
         String selectedSize = ((RadioButton) sizeGroup.getSelectedToggle()).getText();
 
         switch (selectedSize) {
@@ -239,24 +242,14 @@ public class ChicagoPizzaViewController {
                 throw new IllegalStateException("Unexpected size: " + selectedSize);
         }
 
-        // Add pizza to the current order using OrderManager
         OrderManager.addOrderToCurrentOrder(pizza);
 
-        // Provide feedback to the user that the pizza has been added to the order
         int orderNumber = OrderManager.getCurrentOrderNumber();
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Order Confirmation");
         alert.setHeaderText("Order #" + orderNumber);
         alert.setContentText("Your pizza has been added.");
         alert.showAndWait();
-
-        // Optionally, print the details of the current order to the console
-        System.out.println("Order #" + orderNumber);
-        System.out.println("Pizza Order Details:");
-        System.out.println("Type: " + choose_type.getValue());
-        System.out.println("Size: " + selectedSize);
-        System.out.println("Crust: " + pizza.getCrust().toString());
-        System.out.println("Price: $" + pizza.price());
     }
 
     private void addCustomToppings(BuildYourOwn pizza) {
@@ -279,4 +272,28 @@ public class ChicagoPizzaViewController {
             pizza.removeTopping(pizza.getToppings().get(7));
         }
     }
+
+    private void updatePizzaImage(String pizzaType) {
+        Image image = null;
+        switch (pizzaType) {
+            case "Deluxe":
+                image = new Image(getClass().getResourceAsStream("/images/ch_deluxe.png"));
+                break;
+            case "BBQ Chicken":
+                image = new Image(getClass().getResourceAsStream("/images/ch_bbq.png"));
+                break;
+            case "Meatzza":
+                image = new Image(getClass().getResourceAsStream("/images/ch_meat.png"));
+                break;
+            case "Build Your Own":
+                image = new Image(getClass().getResourceAsStream("/images/ch_build.png"));
+                break;
+        }
+
+        if (image != null) {
+            ch_pic.setImage(image);
+        } else {
+        }
+    }
+
 }
