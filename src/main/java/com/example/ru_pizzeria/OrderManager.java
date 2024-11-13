@@ -1,71 +1,81 @@
 package com.example.ru_pizzeria;
 
+import pizzeria_package.Order;
 import pizzeria_package.Pizza;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class OrderManager {
-    private static final Map<Integer, List<Pizza>> orders = new HashMap<>();
-    private static int nextOrderNumber = 1;  // Tracks the next available order number, starting at 1
-    private static int currentOrderNumber = 1;  // Start the current order number at 1
+    private static final Map<Integer, Order> orders = new HashMap<>();
+    private static int nextOrderNumber = 1;
+    private static int currentOrderNumber = 0;
 
     public static void addOrderToCurrentOrder(Pizza pizza) {
-        // If there is no active order, start a new one with the next order number
         if (currentOrderNumber == 0) {
-            currentOrderNumber = nextOrderNumber;  // Set the current order number to the next available order number
-            orders.put(currentOrderNumber, new ArrayList<>()); // Create a new list for this order
+            currentOrderNumber = nextOrderNumber;
+            orders.put(currentOrderNumber, new Order());
         }
-
-        // Check if the list for the current order exists, if not, create it
-        if (orders.get(currentOrderNumber) == null) {
-            orders.put(currentOrderNumber, new ArrayList<>());  // Initialize the list if not present
-        }
-
-        // Add pizza to the current order's list
-        orders.get(currentOrderNumber).add(pizza);
+        orders.get(currentOrderNumber).addPizza(pizza);
     }
 
-    // Method to get an order by order number
     public static List<Pizza> getOrder(int orderNumber) {
-        return orders.get(orderNumber);
+        Order order = orders.get(orderNumber);
+        return (order != null && !order.isPlaced()) ? order.getPizzas() : null;
     }
 
-    // Method to get the current order number
+    public static List<Pizza> getPlacedOrder(int orderNumber) {
+        Order order = orders.get(orderNumber);
+        return (order != null && order.isPlaced()) ? order.getPizzas() : null;
+    }
+
     public static int getCurrentOrderNumber() {
         return currentOrderNumber;
     }
 
-    // Method to complete the current order and increment the order number for the next order
     public static void completeCurrentOrder() {
-        nextOrderNumber++;  // Increment the next order number
-        currentOrderNumber = nextOrderNumber;  // Set the current order number to the next order number
+        if (currentOrderNumber != 0 && orders.containsKey(currentOrderNumber)) {
+            orders.get(currentOrderNumber).placeOrder();
+            currentOrderNumber = 0;
+            nextOrderNumber++;
+        }
     }
 
-    // Method to get the next order number
     public static int getNextOrderNumber() {
         return nextOrderNumber;
     }
 
-    // Method to delete an order
     public static boolean deleteOrder(int orderNumber) {
-        if (orders.containsKey(orderNumber)) {
-            orders.remove(orderNumber);  // Remove the order from the map
+        Order order = orders.get(orderNumber);
+        if (order != null && order.isPlaced()) {
+            orders.remove(orderNumber);
             return true;
         }
         return false;
     }
 
     public static void updateOrder(int orderNumber, List<Pizza> updatedPizzas) {
-        if (orders.containsKey(orderNumber)) {
-            orders.put(orderNumber, updatedPizzas);  // Update the order with the new pizza list
-        } else {
+        Order order = orders.get(orderNumber);
+        if (order != null && !order.isPlaced()) {
+            order.clearOrder();
+            for (Pizza pizza : updatedPizzas) {
+                order.addPizza(pizza);
+            }
         }
     }
 
     public static List<Integer> getAllOrderNumbers() {
         return new ArrayList<>(orders.keySet());
+    }
+
+    public static List<Integer> getPlacedOrderNumbers() {
+        List<Integer> placedOrderNumbers = new ArrayList<>();
+        for (Order order : orders.values()) {
+            if (order.isPlaced()) {
+                placedOrderNumbers.add(order.getNumber());
+            }
+        }
+        return placedOrderNumbers;
     }
 }

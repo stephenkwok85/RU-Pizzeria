@@ -111,29 +111,49 @@ public class OrderViewController {
                 double total = subtotal + tax;
                 order_total.setText(String.format("%.2f", total));
             } else {
-                showAlert(ERROR_TITLE, "Order number not found!");
+                showAlert(ERROR_TITLE, "Order number not found or it has already been placed!");
             }
         } catch (NumberFormatException e) {
             showAlert(INVALID_INPUT_TITLE, "Please enter a valid order number!");
         }
     }
 
-
     @FXML
     private void completeOrder() {
-        OrderManager.completeCurrentOrder();
-        int nextOrderNumber = OrderManager.getNextOrderNumber();
-        int currentOrderNumber = OrderManager.getCurrentOrderNumber() - 1;
+        if (order_num_selection.getText().isEmpty()) {
+            showAlert(INVALID_INPUT_TITLE, "Please enter a valid order number before completing the order.");
+            return;
+        }
 
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(ORDER_COMPLETED_TITLE);
-        alert.setHeaderText("Order #" + currentOrderNumber + " Completed");
-        alert.setContentText("Your current order is now complete.\nThe next order number will be: " + nextOrderNumber);
-        alert.showAndWait();
+        try {
+            int orderNum = Integer.parseInt(order_num_selection.getText());
+            List<Pizza> pizzas = OrderManager.getOrder(orderNum);
 
-        order_num_selection.clear();
-        current_order_table.getItems().clear();
+            if (pizzas == null || pizzas.isEmpty()) {
+                showAlert(ERROR_TITLE, "Order number not found!");
+                return;
+            }
+
+            OrderManager.completeCurrentOrder();
+
+            order_num_selection.clear();
+            current_order_table.getItems().clear();
+            subtotal_order.clear();
+            tax_order.clear();
+            order_total.clear();
+
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle(ORDER_COMPLETED_TITLE);
+            alert.setHeaderText("Order #" + orderNum + " Completed");
+            alert.setContentText("The order has been placed. You can view it in the Orders Placed menu.");
+            alert.showAndWait();
+
+        } catch (NumberFormatException e) {
+            showAlert(INVALID_INPUT_TITLE, "Please enter a valid order number!");
+        }
     }
+
+
 
     private void showAlert(String title, String content) {
         Alert alert = new Alert(AlertType.WARNING);
@@ -182,6 +202,4 @@ public class OrderViewController {
             showAlert(ERROR_TITLE, "Order not found.");
         }
     }
-
 }
-

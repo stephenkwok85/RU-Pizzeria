@@ -42,16 +42,24 @@ public class PlacedOrderViewController {
 
     @FXML
     private void initialize() {
-        placed_order_number_selection.setItems(FXCollections.observableArrayList(OrderManager.getAllOrderNumbers()));
-        placed_order_number_selection.setOnAction(event -> showOrderDetails());
         cancel_order_button.setOnAction(event -> cancelOrder());
         export_order_button.setOnAction(event -> exportOrders());
+
+        refreshPlacedOrders();
+        placed_order_number_selection.setOnAction(event -> showOrderDetails());
+    }
+
+    private void refreshPlacedOrders() {
+        placed_order_number_selection.getItems().clear();
+
+        List<Integer> placedOrderNumbers = OrderManager.getPlacedOrderNumbers();
+        placed_order_number_selection.getItems().addAll(placedOrderNumbers);
     }
 
     private void showOrderDetails() {
         Integer orderNum = placed_order_number_selection.getValue();
         if (orderNum != null) {
-            List<Pizza> pizzas = OrderManager.getOrder(orderNum);
+            List<Pizza> pizzas = OrderManager.getPlacedOrder(orderNum);
 
             if (pizzas != null && !pizzas.isEmpty()) {
                 pizzaDetailsList.clear();
@@ -97,7 +105,7 @@ public class PlacedOrderViewController {
             boolean isDeleted = OrderManager.deleteOrder(orderNum);
             if (isDeleted) {
                 showAlert(ORDER_CANCELED_TITLE, "Order #" + orderNum + " has been successfully canceled.");
-                placed_order_number_selection.getItems().remove(orderNum);
+                refreshPlacedOrders();
                 placed_order_number_selection.setValue(null);
                 placed_order_list.getItems().clear();
                 order_total.clear();
@@ -111,8 +119,8 @@ public class PlacedOrderViewController {
 
     private void exportOrders() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (Integer orderNum : OrderManager.getAllOrderNumbers()) {
-                List<Pizza> pizzas = OrderManager.getOrder(orderNum);
+            for (Integer orderNum : OrderManager.getPlacedOrderNumbers()) { // 완료된 주문만 내보냄
+                List<Pizza> pizzas = OrderManager.getPlacedOrder(orderNum);
                 if (pizzas != null && !pizzas.isEmpty()) {
                     writer.write("Order #" + orderNum + "\n");
                     double subtotal = 0.0;

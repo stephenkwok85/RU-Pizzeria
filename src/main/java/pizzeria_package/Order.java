@@ -7,10 +7,12 @@ public class Order {
     private static int orderCounter = 1;
     private int number;
     private List<Pizza> pizzas;
+    private boolean isPlaced;
 
     public Order() {
         this.number = orderCounter++;
         this.pizzas = new ArrayList<>();
+        this.isPlaced = false;
     }
 
     public int getNumber() {
@@ -42,10 +44,19 @@ public class Order {
         return pizzas.stream().mapToDouble(Pizza::price).sum();
     }
 
+    public boolean isPlaced() {
+        return isPlaced;
+    }
+
+    public void placeOrder() {
+        this.isPlaced = true;
+    }
+
     @Override
     public String toString() {
         return "Order Number: " + number + "\n" +
                 "Pizzas: " + pizzas + "\n" +
-                "Subtotal: $" + String.format("%.2f", calculateSubtotal()) + "\n";
+                "Subtotal: $" + String.format("%.2f", calculateSubtotal()) + "\n" +
+                "Status: " + (isPlaced ? "Placed" : "In Progress") + "\n";
     }
 }
