@@ -18,6 +18,15 @@ import java.util.List;
 
 public class PlacedOrderViewController {
 
+    private static final double TAX_RATE = 0.06625;
+    private static final String FILE_PATH = System.getProperty("user.dir") + "/PlacedOrders.txt";
+
+    private static final String ERROR_TITLE = "Error";
+    private static final String ORDER_CANCELED_TITLE = "Order Canceled";
+    private static final String NO_ORDER_SELECTED_TITLE = "No Order Selected";
+    private static final String EXPORT_SUCCESS_TITLE = "Export Successful";
+    private static final String EXPORT_FAILED_TITLE = "Export Failed";
+
     @FXML
     private ComboBox<Integer> placed_order_number_selection;
     @FXML
@@ -52,7 +61,8 @@ public class PlacedOrderViewController {
                 int pizzaNumber = 1;
                 for (Pizza pizza : pizzas) {
                     pizzaDetailsList.add("Pizza " + pizzaNumber++);
-                    pizzaDetailsList.add("Type: " + pizza.getClass().getSimpleName());
+                    pizzaDetailsList.add("Category: " + pizza.getClass().getSimpleName());
+                    pizzaDetailsList.add("Style: " + pizza.getStyle());
                     pizzaDetailsList.add("Size: " + pizza.getSize());
                     pizzaDetailsList.add("Crust: " + pizza.getCrust().toString());
                     pizzaDetailsList.add("Price: $" + pizza.price());
@@ -72,11 +82,11 @@ public class PlacedOrderViewController {
 
                 placed_order_list.setItems(pizzaDetailsList);
 
-                double tax = subtotal * 0.06625;
+                double tax = subtotal * TAX_RATE;
                 double total = subtotal + tax;
                 order_total.setText(String.format("%.2f", total));
             } else {
-                showAlert("Error", "Order not found.");
+                showAlert(ERROR_TITLE, "Order not found.");
             }
         }
     }
@@ -86,24 +96,21 @@ public class PlacedOrderViewController {
         if (orderNum != null) {
             boolean isDeleted = OrderManager.deleteOrder(orderNum);
             if (isDeleted) {
-                showAlert("Order Canceled", "Order #" + orderNum + " has been successfully canceled.");
+                showAlert(ORDER_CANCELED_TITLE, "Order #" + orderNum + " has been successfully canceled.");
                 placed_order_number_selection.getItems().remove(orderNum);
                 placed_order_number_selection.setValue(null);
                 placed_order_list.getItems().clear();
                 order_total.clear();
             } else {
-                showAlert("Error", "Order #" + orderNum + " could not be found or deleted.");
+                showAlert(ERROR_TITLE, "Order #" + orderNum + " could not be found or deleted.");
             }
         } else {
-            showAlert("No Order Selected", "Please select an order to cancel.");
+            showAlert(NO_ORDER_SELECTED_TITLE, "Please select an order to cancel.");
         }
     }
 
     private void exportOrders() {
-        String projectPath = System.getProperty("user.dir");  // 현재 프로젝트 루트 경로
-        String filePath = projectPath + "/PlacedOrders.txt";
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (Integer orderNum : OrderManager.getAllOrderNumbers()) {
                 List<Pizza> pizzas = OrderManager.getOrder(orderNum);
                 if (pizzas != null && !pizzas.isEmpty()) {
@@ -127,18 +134,16 @@ public class PlacedOrderViewController {
 
                         subtotal += pizza.price();
                     }
-                    double tax = subtotal * 0.06625;
+                    double tax = subtotal * TAX_RATE;
                     double total = subtotal + tax;
                     writer.write("Order Total (including tax): $" + String.format("%.2f", total) + "\n\n");
                 }
             }
-            showAlert("Export Successful", "All placed orders have been successfully exported to: " + filePath);
+            showAlert(EXPORT_SUCCESS_TITLE, "All placed orders have been successfully exported to: " + FILE_PATH);
         } catch (IOException e) {
-            showAlert("Export Failed", "An error occurred while exporting orders.");
+            showAlert(EXPORT_FAILED_TITLE, "An error occurred while exporting orders.");
         }
     }
-
-
 
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -146,4 +151,5 @@ public class PlacedOrderViewController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
 }

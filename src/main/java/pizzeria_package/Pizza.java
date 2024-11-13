@@ -7,10 +7,20 @@ public abstract class Pizza {
     private ArrayList<Topping> toppings;
     private Crust crust;
     private Size size;
+    private String style;
 
     // Constructor to initialize the toppings list
-    public Pizza() {
+    public Pizza(String style) {
         this.toppings = new ArrayList<>();
+        this.style = style;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
     }
 
     // Abstract method to calculate the price, implemented by subclasses

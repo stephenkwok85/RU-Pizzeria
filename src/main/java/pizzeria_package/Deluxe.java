@@ -1,9 +1,16 @@
 package pizzeria_package;
+
 import java.util.List;
 
 public class Deluxe extends Pizza {
 
-    public Deluxe() {
+    private static final double SMALL_PRICE = 16.99;
+    private static final double MEDIUM_PRICE = 18.99;
+    private static final double LARGE_PRICE = 20.99;
+
+    public Deluxe(String style, Crust crust) {
+        super(style);
+        setCrust(crust);
         setToppings(List.of(Topping.SAUSAGE, Topping.PEPPERONI, Topping.GREEN_PEPPER, Topping.ONION, Topping.MUSHROOM));
     }
 
@@ -11,11 +18,11 @@ public class Deluxe extends Pizza {
     public double price() {
         switch (getSize()) {
             case SMALL:
-                return 16.99;
+                return SMALL_PRICE;
             case MEDIUM:
-                return 18.99;
+                return MEDIUM_PRICE;
             case LARGE:
-                return 20.99;
+                return LARGE_PRICE;
             default:
                 throw new IllegalStateException("Unexpected size: " + getSize());
         }

@@ -15,6 +15,23 @@ import javafx.scene.image.ImageView;
 
 public class NyPizzaViewController {
 
+    private static final double TOPPING_PRICE = 1.69;
+    private static final double DELUXE_S_PRICE = 16.99;
+    private static final double DELUXE_M_PRICE = 18.99;
+    private static final double DELUXE_L_PRICE = 20.99;
+
+    private static final double BBQ_CHICKEN_S_PRICE = 14.99;
+    private static final double BBQ_CHICKEN_M_PRICE = 16.99;
+    private static final double BBQ_CHICKEN_L_PRICE = 19.99;
+
+    private static final double MEATZZA_S_PRICE = 17.99;
+    private static final double MEATZZA_M_PRICE = 19.99;
+    private static final double MEATZZA_L_PRICE = 21.99;
+
+    private static final double BUILD_YOUR_OWN_S_PRICE = 8.99;
+    private static final double BUILD_YOUR_OWN_M_PRICE = 10.99;
+    private static final double BUILD_YOUR_OWN_L_PRICE = 12.99;
+
     @FXML
     private ChoiceBox<String> choose_type;
     @FXML
@@ -178,24 +195,26 @@ public class NyPizzaViewController {
         double basePrice = calculateBasePrice(selectedType, selectedSize);
         int toppingCount = isCustomizable ? selectedToppingsCount : 0;
 
-        double totalPrice = basePrice + (1.69 * toppingCount);
+        double totalPrice = basePrice + (TOPPING_PRICE * toppingCount);
         pizza_price.setText(String.format("%.2f", totalPrice));
     }
+
 
     private double calculateBasePrice(String type, String size) {
         switch (type) {
             case "Deluxe":
-                return size.equals("S") ? 16.99 : size.equals("M") ? 18.99 : 20.99;
+                return size.equals("S") ? DELUXE_S_PRICE : size.equals("M") ? DELUXE_M_PRICE : DELUXE_L_PRICE;
             case "BBQ Chicken":
-                return size.equals("S") ? 14.99 : size.equals("M") ? 16.99 : 19.99;
+                return size.equals("S") ? BBQ_CHICKEN_S_PRICE : size.equals("M") ? BBQ_CHICKEN_M_PRICE : BBQ_CHICKEN_L_PRICE;
             case "Meatzza":
-                return size.equals("S") ? 17.99 : size.equals("M") ? 19.99 : 21.99;
+                return size.equals("S") ? MEATZZA_S_PRICE : size.equals("M") ? MEATZZA_M_PRICE : MEATZZA_L_PRICE;
             case "Build Your Own":
-                return size.equals("S") ? 8.99 : size.equals("M") ? 10.99 : 12.99;
+                return size.equals("S") ? BUILD_YOUR_OWN_S_PRICE : size.equals("M") ? BUILD_YOUR_OWN_M_PRICE : BUILD_YOUR_OWN_L_PRICE;
             default:
                 return 0.0;
         }
     }
+
 
     @FXML
     private void addOrder() {

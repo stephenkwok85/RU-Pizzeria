@@ -21,6 +21,7 @@
       <TableView fx:id="current_order_table" layoutX="25.0" layoutY="100.0" prefHeight="200.0" prefWidth="555.0">
          <columns>
             <TableColumn fx:id="pizzaNumberColumn" prefWidth="50.0" text="Number" />
+            <TableColumn fx:id="pizzaCategoryColumn" prefWidth="100.0" text="Category" /> <!-- 새 컬럼 추가 -->
             <TableColumn fx:id="pizzaTypeColumn" prefWidth="100.0" text="Type" />
             <TableColumn fx:id="pizzaSizeColumn" prefWidth="100.0" text="Size" />
             <TableColumn fx:id="pizzaCrustColumn" prefWidth="100.0" text="Crust" />
@@ -28,6 +29,7 @@
             <TableColumn fx:id="pizzaPriceColumn" prefWidth="55.0" text="Price" />
          </columns>
       </TableView>
+
 
       <Label layoutX="33.0" layoutY="316.0" prefHeight="22.0" prefWidth="83.0" text="Subtotal: $" />
       <TextField fx:id="subtotal_order" editable="false" layoutX="94.0" layoutY="316.0" prefHeight="22.0" prefWidth="100.0" />

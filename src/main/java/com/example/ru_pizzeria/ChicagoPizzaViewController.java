@@ -20,6 +20,21 @@ import javafx.scene.image.ImageView;
 
 public class ChicagoPizzaViewController {
 
+    private static final double TOPPING_PRICE = 1.69;
+    private static final int MAX_TOPPINGS = 7;
+    private static final double DELUXE_S_PRICE = 16.99;
+    private static final double DELUXE_M_PRICE = 18.99;
+    private static final double DELUXE_L_PRICE = 20.99;
+    private static final double BBQ_S_PRICE = 14.99;
+    private static final double BBQ_M_PRICE = 16.99;
+    private static final double BBQ_L_PRICE = 19.99;
+    private static final double MEATZZA_S_PRICE = 17.99;
+    private static final double MEATZZA_M_PRICE = 19.99;
+    private static final double MEATZZA_L_PRICE = 21.99;
+    private static final double BYO_S_PRICE = 8.99;
+    private static final double BYO_M_PRICE = 10.99;
+    private static final double BYO_L_PRICE = 12.99;
+
     @FXML
     private ChoiceBox<String> choose_type;
     @FXML
@@ -43,7 +58,6 @@ public class ChicagoPizzaViewController {
 
     private boolean isCustomizable = false;
     private int selectedToppingsCount = 0;
-    private final int MAX_TOPPINGS = 7;
 
     @FXML
     public void initialize() {
@@ -71,6 +85,35 @@ public class ChicagoPizzaViewController {
 
     private void setPizzaOptions(String pizzaType) {
         crustField.clear();
+        resetToppingSelections();
+
+        switch (pizzaType) {
+            case "Deluxe":
+                crustField.setText("Deep Dish");
+                selectToppings(SAUSAGE, PEPPERONI, GREEN_PEPPER, ONION, MUSHROOM);
+                break;
+            case "BBQ Chicken":
+                crustField.setText("Pan");
+                selectToppings(BBQ_CHICKEN, GREEN_PEPPER, PROVOLONE, CHEDDAR);
+                break;
+            case "Meatzza":
+                crustField.setText("Stuffed");
+                selectToppings(SAUSAGE, PEPPERONI, BEEF, HAM);
+                break;
+            case "Build Your Own":
+                crustField.setText("Pan");
+                selectedToppingsCount = 0;
+                break;
+        }
+    }
+
+    private void selectToppings(RadioButton... toppings) {
+        for (RadioButton topping : toppings) {
+            topping.setSelected(true);
+        }
+    }
+
+    private void resetToppingSelections() {
         SAUSAGE.setSelected(false);
         PEPPERONI.setSelected(false);
         GREEN_PEPPER.setSelected(false);
@@ -85,35 +128,6 @@ public class ChicagoPizzaViewController {
         SPINACH.setSelected(false);
         PINEAPPLE.setSelected(false);
         BACON.setSelected(false);
-
-        switch (pizzaType) {
-            case "Deluxe":
-                crustField.setText("Deep Dish");
-                SAUSAGE.setSelected(true);
-                PEPPERONI.setSelected(true);
-                GREEN_PEPPER.setSelected(true);
-                ONION.setSelected(true);
-                MUSHROOM.setSelected(true);
-                break;
-            case "BBQ Chicken":
-                crustField.setText("Pan");
-                BBQ_CHICKEN.setSelected(true);
-                GREEN_PEPPER.setSelected(true);
-                PROVOLONE.setSelected(true);
-                CHEDDAR.setSelected(true);
-                break;
-            case "Meatzza":
-                crustField.setText("Stuffed");
-                SAUSAGE.setSelected(true);
-                PEPPERONI.setSelected(true);
-                BEEF.setSelected(true);
-                HAM.setSelected(true);
-                break;
-            case "Build Your Own":
-                crustField.setText("Pan");
-                selectedToppingsCount = 0;
-                break;
-        }
     }
 
     private void lockToppings(boolean lock) {
@@ -183,20 +197,20 @@ public class ChicagoPizzaViewController {
         double basePrice = calculateBasePrice(selectedType, selectedSize);
         int toppingCount = isCustomizable ? selectedToppingsCount : 0;
 
-        double totalPrice = basePrice + (1.69 * toppingCount);
+        double totalPrice = basePrice + (TOPPING_PRICE * toppingCount);
         pizza_price.setText(String.format("%.2f", totalPrice));
     }
 
     private double calculateBasePrice(String type, String size) {
         switch (type) {
             case "Deluxe":
-                return size.equals("S") ? 16.99 : size.equals("M") ? 18.99 : 20.99;
+                return size.equals("S") ? DELUXE_S_PRICE : size.equals("M") ? DELUXE_M_PRICE : DELUXE_L_PRICE;
             case "BBQ Chicken":
-                return size.equals("S") ? 14.99 : size.equals("M") ? 16.99 : 19.99;
+                return size.equals("S") ? BBQ_S_PRICE : size.equals("M") ? BBQ_M_PRICE : BBQ_L_PRICE;
             case "Meatzza":
-                return size.equals("S") ? 17.99 : size.equals("M") ? 19.99 : 21.99;
+                return size.equals("S") ? MEATZZA_S_PRICE : size.equals("M") ? MEATZZA_M_PRICE : MEATZZA_L_PRICE;
             case "Build Your Own":
-                return size.equals("S") ? 8.99 : size.equals("M") ? 10.99 : 12.99;
+                return size.equals("S") ? BYO_S_PRICE : size.equals("M") ? BYO_M_PRICE : BYO_L_PRICE;
             default:
                 return 0.0;
         }
@@ -268,8 +282,8 @@ public class ChicagoPizzaViewController {
         if (PINEAPPLE.isSelected()) pizza.addTopping(Topping.PINEAPPLE);
         if (BACON.isSelected()) pizza.addTopping(Topping.BACON);
 
-        if (pizza.getToppings().size() > 7) {
-            pizza.removeTopping(pizza.getToppings().get(7));
+        if (pizza.getToppings().size() > MAX_TOPPINGS) {
+            pizza.removeTopping(pizza.getToppings().get(MAX_TOPPINGS));
         }
     }
 
@@ -295,5 +309,4 @@ public class ChicagoPizzaViewController {
         } else {
         }
     }
-
 }

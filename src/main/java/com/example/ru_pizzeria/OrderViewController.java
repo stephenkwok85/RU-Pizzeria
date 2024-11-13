@@ -16,7 +16,16 @@ import pizzeria_package.Topping;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 public class OrderViewController {
+
+    private static final double TAX_RATE = 0.06625;
+    private static final String ERROR_TITLE = "Error";
+    private static final String INVALID_INPUT_TITLE = "Invalid Input";
+    private static final String ORDER_COMPLETED_TITLE = "Order Completed";
+    private static final String ORDER_CLEARED_TITLE = "Order Cleared";
+    private static final String NO_SELECTION_TITLE = "No Selection";
+    private static final String ERROR_HEADER = null;
 
     @FXML
     private TextField order_num_selection;
@@ -24,6 +33,8 @@ public class OrderViewController {
     private TableView<Pizza> current_order_table;
     @FXML
     private TableColumn<Pizza, Integer> pizzaNumberColumn;
+    @FXML
+    private TableColumn<Pizza, String> pizzaCategoryColumn;
     @FXML
     private TableColumn<Pizza, String> pizzaTypeColumn;
     @FXML
@@ -51,17 +62,35 @@ public class OrderViewController {
 
     @FXML
     public void initialize() {
-        pizzaNumberColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(current_order_table.getItems().indexOf(cellData.getValue()) + 1));
-        pizzaTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClass().getSimpleName()));
-        pizzaSizeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSize().toString()));
-        pizzaCrustColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCrust().toString()));
-        pizzaToppingsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
-                cellData.getValue().getToppings().stream().map(Topping::toString).collect(Collectors.joining(", "))));
-        pizzaPriceColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().price()));
+        pizzaNumberColumn.setCellValueFactory(cellData ->
+                new SimpleObjectProperty<>(current_order_table.getItems().indexOf(cellData.getValue()) + 1)
+        );
+
+        pizzaCategoryColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getClass().getSimpleName())
+        );
+
+        pizzaTypeColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getStyle())
+        );
+
+        pizzaSizeColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getSize().toString())
+        );
+        pizzaCrustColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getCrust().toString())
+        );
+        pizzaToppingsColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(
+                        cellData.getValue().getToppings().stream().map(Topping::toString).collect(Collectors.joining(", "))
+                )
+        );
+        pizzaPriceColumn.setCellValueFactory(cellData ->
+                new SimpleObjectProperty<>(cellData.getValue().price())
+        );
 
         current_order_table.setItems(pizzaDetailsList);
     }
-
 
     @FXML
     private void searchOrder() {
@@ -76,45 +105,40 @@ public class OrderViewController {
                 double subtotal = pizzas.stream().mapToDouble(Pizza::price).sum();
                 subtotal_order.setText(String.format("%.2f", subtotal));
 
-                double tax = subtotal * 0.06625;
+                double tax = subtotal * TAX_RATE;
                 tax_order.setText(String.format("%.2f", tax));
 
                 double total = subtotal + tax;
                 order_total.setText(String.format("%.2f", total));
             } else {
-                showAlert("Error", "Order number not found!");
+                showAlert(ERROR_TITLE, "Order number not found!");
             }
         } catch (NumberFormatException e) {
-            showAlert("Invalid Input", "Please enter a valid order number!");
+            showAlert(INVALID_INPUT_TITLE, "Please enter a valid order number!");
         }
     }
 
 
     @FXML
     private void completeOrder() {
-        // Complete the current order in OrderManager
         OrderManager.completeCurrentOrder();
-
-        // Get the next order number (which should be the new order number)
         int nextOrderNumber = OrderManager.getNextOrderNumber();
-        int currentOrderNumber = OrderManager.getCurrentOrderNumber()-1;
+        int currentOrderNumber = OrderManager.getCurrentOrderNumber() - 1;
 
-        // Display the updated order number in the alert
         Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Order Completed");
+        alert.setTitle(ORDER_COMPLETED_TITLE);
         alert.setHeaderText("Order #" + currentOrderNumber + " Completed");
         alert.setContentText("Your current order is now complete.\nThe next order number will be: " + nextOrderNumber);
         alert.showAndWait();
 
-        // Optionally, reset any other UI components related to the order
-        order_num_selection.clear(); // Clear the order number text field
-        current_order_table.getItems().clear(); // Clear the order table view (if necessary)
+        order_num_selection.clear();
+        current_order_table.getItems().clear();
     }
 
     private void showAlert(String title, String content) {
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle(title);
-        alert.setHeaderText(null);
+        alert.setHeaderText(ERROR_HEADER);
         alert.setContentText(content);
         alert.showAndWait();
     }
@@ -122,24 +146,20 @@ public class OrderViewController {
     @FXML
     private void clearAllOrders() {
         try {
-            // Get the order number from the search field
             int orderNum = Integer.parseInt(order_num_selection.getText());
-
-            // Delete the order from OrderManager
             boolean isDeleted = OrderManager.deleteOrder(orderNum);
 
             if (isDeleted) {
-                showAlert("Order Cleared", "Order #" + orderNum + " has been cleared.");
-                // Clear the UI components
-                current_order_table.getItems().clear(); // Clear the order table view (if necessary)
+                showAlert(ORDER_CLEARED_TITLE, "Order #" + orderNum + " has been cleared.");
+                current_order_table.getItems().clear();
                 subtotal_order.clear();
                 tax_order.clear();
                 order_total.clear();
             } else {
-                showAlert("Error", "Order #" + orderNum + " not found.");
+                showAlert(ERROR_TITLE, "Order #" + orderNum + " not found.");
             }
         } catch (NumberFormatException e) {
-            showAlert("Invalid Input", "Please enter a valid order number to clear.");
+            showAlert(INVALID_INPUT_TITLE, "Please enter a valid order number to clear.");
         }
     }
 
@@ -147,7 +167,7 @@ public class OrderViewController {
     private void removePizza() {
         Pizza selectedPizza = current_order_table.getSelectionModel().getSelectedItem();
         if (selectedPizza == null) {
-            showAlert("No Selection", "Please select a pizza to remove.");
+            showAlert(NO_SELECTION_TITLE, "Please select a pizza to remove.");
             return;
         }
 
@@ -157,10 +177,11 @@ public class OrderViewController {
         if (pizzas != null && !pizzas.isEmpty()) {
             pizzas.remove(selectedPizza);
             OrderManager.updateOrder(orderNum, pizzas);
-            searchOrder(); // Update the TableView with the new list
+            searchOrder();
         } else {
-            showAlert("Error", "Order not found.");
+            showAlert(ERROR_TITLE, "Order not found.");
         }
     }
 
 }
+
