@@ -48,8 +48,16 @@ public class OrderManager {
 
     public static boolean deleteOrder(int orderNumber) {
         Order order = orders.get(orderNumber);
-        if (order != null && order.isPlaced()) {
+        if (order != null && !order.isPlaced()) {
             orders.remove(orderNumber);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean deletePlacedOrder(int orderNum) {
+        if (orders.containsKey(orderNum)) {
+            orders.remove(orderNum);
             return true;
         }
         return false;

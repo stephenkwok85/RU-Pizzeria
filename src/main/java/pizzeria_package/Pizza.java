@@ -45,14 +45,14 @@ public abstract class Pizza {
     }
 
     public List<Topping> getToppings() {
-        return new ArrayList<>(toppings);
+        return toppings;
     }
+
 
     public void setToppings(List<Topping> toppings) {
         this.toppings = new ArrayList<>(toppings);
     }
 
-    // manage toppings for BuildYourOwn
     public void addTopping(Topping topping) {
         if (toppings.size() < 7) {
             toppings.add(topping);
@@ -65,7 +65,6 @@ public abstract class Pizza {
         toppings.remove(topping);
     }
 
-    // temporary if needed later
     public void clearToppings() {
         toppings.clear();
     }

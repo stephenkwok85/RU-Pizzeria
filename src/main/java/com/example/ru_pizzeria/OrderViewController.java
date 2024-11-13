@@ -82,7 +82,9 @@ public class OrderViewController {
         );
         pizzaToppingsColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(
-                        cellData.getValue().getToppings().stream().map(Topping::toString).collect(Collectors.joining(", "))
+                        cellData.getValue().getToppings().stream()
+                                .map(Topping::toString)
+                                .collect(Collectors.joining(", "))
                 )
         );
         pizzaPriceColumn.setCellValueFactory(cellData ->
@@ -167,21 +169,35 @@ public class OrderViewController {
     private void clearAllOrders() {
         try {
             int orderNum = Integer.parseInt(order_num_selection.getText());
-            boolean isDeleted = OrderManager.deleteOrder(orderNum);
+            List<Pizza> pizzas = OrderManager.getOrder(orderNum); // 주문을 가져옴
 
-            if (isDeleted) {
-                showAlert(ORDER_CLEARED_TITLE, "Order #" + orderNum + " has been cleared.");
-                current_order_table.getItems().clear();
-                subtotal_order.clear();
-                tax_order.clear();
-                order_total.clear();
-            } else {
-                showAlert(ERROR_TITLE, "Order #" + orderNum + " not found.");
+            if (pizzas == null || pizzas.isEmpty()) {
+                // 주문이 없거나 피자가 없으면 경고 표시
+                showAlert(ERROR_TITLE, "Order #" + orderNum + " not found or it has no pizzas.");
+                return;
             }
+
+            // 피자 목록을 비움
+            pizzas.clear(); // OrderManager에서 삭제할 수 없으면 이 방법을 사용할 수 있음
+            OrderManager.updateOrder(orderNum, pizzas); // 피자 목록을 업데이트
+
+            // UI 업데이트
+            pizzaDetailsList.clear();
+            current_order_table.setItems(pizzaDetailsList);
+            order_num_selection.clear();
+            subtotal_order.clear();
+            tax_order.clear();
+            order_total.clear();
+
+            showAlert(ORDER_CLEARED_TITLE, "Order #" + orderNum + " has been cleared.");
+
         } catch (NumberFormatException e) {
             showAlert(INVALID_INPUT_TITLE, "Please enter a valid order number to clear.");
         }
     }
+
+
+
 
     @FXML
     private void removePizza() {
@@ -191,15 +207,32 @@ public class OrderViewController {
             return;
         }
 
-        int orderNum = Integer.parseInt(order_num_selection.getText());
-        List<Pizza> pizzas = OrderManager.getOrder(orderNum);
+        try {
+            int orderNum = Integer.parseInt(order_num_selection.getText());
+            List<Pizza> pizzas = OrderManager.getOrder(orderNum);
 
-        if (pizzas != null && !pizzas.isEmpty()) {
-            pizzas.remove(selectedPizza);
-            OrderManager.updateOrder(orderNum, pizzas);
-            searchOrder();
-        } else {
-            showAlert(ERROR_TITLE, "Order not found.");
+            if (pizzas != null && pizzas.contains(selectedPizza)) {
+                pizzas.remove(selectedPizza);
+                OrderManager.updateOrder(orderNum, pizzas);
+                pizzaDetailsList.remove(selectedPizza);
+                updateOrderSummary();
+            } else {
+                showAlert(ERROR_TITLE, "Pizza could not be found in the order.");
+            }
+        } catch (NumberFormatException e) {
+            showAlert(INVALID_INPUT_TITLE, "Please enter a valid order number!");
         }
     }
+
+    private void updateOrderSummary() {
+        double subtotal = pizzaDetailsList.stream().mapToDouble(Pizza::price).sum();
+        subtotal_order.setText(String.format("%.2f", subtotal));
+
+        double tax = subtotal * TAX_RATE;
+        tax_order.setText(String.format("%.2f", tax));
+
+        double total = subtotal + tax;
+        order_total.setText(String.format("%.2f", total));
+    }
+
 }

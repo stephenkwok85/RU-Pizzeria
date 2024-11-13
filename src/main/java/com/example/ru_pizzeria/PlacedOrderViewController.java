@@ -102,7 +102,7 @@ public class PlacedOrderViewController {
     private void cancelOrder() {
         Integer orderNum = placed_order_number_selection.getValue();
         if (orderNum != null) {
-            boolean isDeleted = OrderManager.deleteOrder(orderNum);
+            boolean isDeleted = OrderManager.deletePlacedOrder(orderNum);
             if (isDeleted) {
                 showAlert(ORDER_CANCELED_TITLE, "Order #" + orderNum + " has been successfully canceled.");
                 refreshPlacedOrders();
@@ -119,7 +119,7 @@ public class PlacedOrderViewController {
 
     private void exportOrders() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (Integer orderNum : OrderManager.getPlacedOrderNumbers()) { // 완료된 주문만 내보냄
+            for (Integer orderNum : OrderManager.getPlacedOrderNumbers()) {
                 List<Pizza> pizzas = OrderManager.getPlacedOrder(orderNum);
                 if (pizzas != null && !pizzas.isEmpty()) {
                     writer.write("Order #" + orderNum + "\n");
