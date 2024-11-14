@@ -9,7 +9,15 @@ import javafx.fxml.FXMLLoader;
 import java.io.IOException;
 import javafx.scene.image.ImageView;
 
-
+/**
+ * Controller class for the main view of the pizza ordering application.
+ * This class manages button interactions and image initialization for
+ * different types of pizza orders and order management screens.
+ * It provides methods to open the views for Chicago-style, NY-style pizzas,
+ * current orders, and placed orders.
+ *
+ * @author Stephen Kwok and Jeongtae Kim
+ */
 public class MainViewController {
 
     @FXML
@@ -37,6 +45,10 @@ public class MainViewController {
     @FXML
     private ImageView currentOrderImage;
 
+    /**
+     * Initializes the main view with images for each button
+     * and sets up action handlers to navigate to other views.
+     */
     @FXML
     public void initialize() {
         Image chicagoImage = new Image(getClass().getResourceAsStream("/images/chicago_pizza.png"));
@@ -67,6 +79,10 @@ public class MainViewController {
         current_order_button.setOnAction(event -> openManageOrdersView());
     }
 
+    /**
+     * Opens the Chicago-style pizza ordering view.
+     * Loads the FXML layout for the Chicago-style pizza interface.
+     */
     private void openChicagoPizzaView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("chicago_pizza_view.fxml"));
@@ -79,6 +95,10 @@ public class MainViewController {
         }
     }
 
+    /**
+     * Opens the NY-style pizza ordering view.
+     * Loads the FXML layout for the NY-style pizza interface.
+     */
     private void openNyPizzaView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ny_pizza_view.fxml"));
@@ -91,6 +111,10 @@ public class MainViewController {
         }
     }
 
+    /**
+     * Opens the view to manage current orders.
+     * Loads the FXML layout for the current order interface.
+     */
     private void openManageOrdersView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("current_order_view.fxml"));
@@ -103,6 +127,10 @@ public class MainViewController {
         }
     }
 
+    /**
+     * Opens the view to display placed orders.
+     * Loads the FXML layout for the placed orders interface.
+     */
     private void openOrderView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("placed_order_view.fxml"));

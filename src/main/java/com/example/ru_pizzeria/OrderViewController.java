@@ -17,6 +17,13 @@ import pizzeria_package.Topping;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller class for managing the order view. This class allows users to view, search,
+ * complete, and clear orders, as well as remove pizzas from an order. It also calculates
+ * and displays the order summary, including subtotal, tax, and total amount.
+ *
+ * @author Stephen Kwok and Jeongtae Kim
+ */
 public class OrderViewController {
 
     private static final double TAX_RATE = 0.06625;
@@ -60,6 +67,10 @@ public class OrderViewController {
 
     private ObservableList<Pizza> pizzaDetailsList = FXCollections.observableArrayList();
 
+    /**
+     * Initializes the order view, sets up column data bindings, and
+     * initializes the order table with the list of pizzas.
+     */
     @FXML
     public void initialize() {
         pizzaNumberColumn.setCellValueFactory(cellData ->
@@ -94,6 +105,10 @@ public class OrderViewController {
         current_order_table.setItems(pizzaDetailsList);
     }
 
+    /**
+     * Searches for an order based on the entered order number and displays its pizzas.
+     * Calculates and displays the order's subtotal, tax, and total.
+     */
     @FXML
     private void searchOrder() {
         try {
@@ -120,6 +135,10 @@ public class OrderViewController {
         }
     }
 
+    /**
+     * Completes the current order based on the entered order number, marking it as placed.
+     * Clears the view and displays a confirmation alert.
+     */
     @FXML
     private void completeOrder() {
         if (order_num_selection.getText().isEmpty()) {
@@ -155,8 +174,12 @@ public class OrderViewController {
         }
     }
 
-
-
+    /**
+     * Displays an alert dialog with the specified title and message content.
+     *
+     * @param title   The title of the alert dialog.
+     * @param content The message content of the alert dialog.
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle(title);
@@ -165,23 +188,23 @@ public class OrderViewController {
         alert.showAndWait();
     }
 
+    /**
+     * Clears all pizzas in the current order and resets the order summary.
+     */
     @FXML
     private void clearAllOrders() {
         try {
             int orderNum = Integer.parseInt(order_num_selection.getText());
-            List<Pizza> pizzas = OrderManager.getOrder(orderNum); // 주문을 가져옴
+            List<Pizza> pizzas = OrderManager.getOrder(orderNum);
 
             if (pizzas == null || pizzas.isEmpty()) {
-                // 주문이 없거나 피자가 없으면 경고 표시
                 showAlert(ERROR_TITLE, "Order #" + orderNum + " not found or it has no pizzas.");
                 return;
             }
 
-            // 피자 목록을 비움
-            pizzas.clear(); // OrderManager에서 삭제할 수 없으면 이 방법을 사용할 수 있음
-            OrderManager.updateOrder(orderNum, pizzas); // 피자 목록을 업데이트
+            pizzas.clear();
+            OrderManager.updateOrder(orderNum, pizzas);
 
-            // UI 업데이트
             pizzaDetailsList.clear();
             current_order_table.setItems(pizzaDetailsList);
             order_num_selection.clear();
@@ -196,9 +219,10 @@ public class OrderViewController {
         }
     }
 
-
-
-
+    /**
+     * Removes the selected pizza from the current order.
+     * Updates the order summary to reflect the removal.
+     */
     @FXML
     private void removePizza() {
         Pizza selectedPizza = current_order_table.getSelectionModel().getSelectedItem();
@@ -224,6 +248,9 @@ public class OrderViewController {
         }
     }
 
+    /**
+     * Updates the order summary, including subtotal, tax, and total, based on the pizzas in the current order.
+     */
     private void updateOrderSummary() {
         double subtotal = pizzaDetailsList.stream().mapToDouble(Pizza::price).sum();
         subtotal_order.setText(String.format("%.2f", subtotal));
@@ -234,5 +261,4 @@ public class OrderViewController {
         double total = subtotal + tax;
         order_total.setText(String.format("%.2f", total));
     }
-
 }

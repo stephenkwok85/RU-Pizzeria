@@ -13,6 +13,14 @@ import pizzeria_package.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * Controller class for managing the NY-style pizza order view.
+ * This class handles user interactions related to selecting pizza types, sizes, and toppings.
+ * It updates the view with relevant pizza images, calculates the total price based on selections,
+ * and manages the addition of pizzas to the current order.
+ *
+ * @author Stephen Kwok and Jeongtae Kim
+ */
 public class NyPizzaViewController {
 
     private static final double TOPPING_PRICE = 1.69;
@@ -57,6 +65,9 @@ public class NyPizzaViewController {
     private int selectedToppingsCount = 0;
     private final int MAX_TOPPINGS = 7;
 
+    /**
+     * Initializes the NY-style pizza order view with default settings and listeners.
+     */
     @FXML
     public void initialize() {
         updatePizzaImage("Build Your Own");
@@ -82,7 +93,34 @@ public class NyPizzaViewController {
         updatePizzaPrice();
     }
 
+    /**
+     * Sets pizza options based on the selected pizza type.
+     * @param pizzaType The type of pizza selected.
+     */
     private void setPizzaOptions(String pizzaType) {
+        resetToppings();
+        switch (pizzaType) {
+            case "Deluxe":
+                setDeluxeOptions();
+                break;
+            case "BBQ Chicken":
+                setBBQChickenOptions();
+                break;
+            case "Meatzza":
+                setMeatzzaOptions();
+                break;
+            case "Build Your Own":
+                setBuildYourOwnOptions();
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid pizza type: " + pizzaType);
+        }
+    }
+
+    /**
+     * Resets all topping selections to unselected.
+     */
+    private void resetToppings() {
         SAUSAGE.setSelected(false);
         PEPPERONI.setSelected(false);
         GREEN_PEPPER.setSelected(false);
@@ -97,37 +135,54 @@ public class NyPizzaViewController {
         SPINACH.setSelected(false);
         PINEAPPLE.setSelected(false);
         BACON.setSelected(false);
-
-        switch (pizzaType) {
-            case "Deluxe":
-                crustField.setText("Brooklyn");
-                SAUSAGE.setSelected(true);
-                PEPPERONI.setSelected(true);
-                GREEN_PEPPER.setSelected(true);
-                ONION.setSelected(true);
-                MUSHROOM.setSelected(true);
-                break;
-            case "BBQ Chicken":
-                crustField.setText("Thin");
-                BBQ_CHICKEN.setSelected(true);
-                GREEN_PEPPER.setSelected(true);
-                PROVOLONE.setSelected(true);
-                CHEDDAR.setSelected(true);
-                break;
-            case "Meatzza":
-                crustField.setText("Hand-tossed");
-                SAUSAGE.setSelected(true);
-                PEPPERONI.setSelected(true);
-                BEEF.setSelected(true);
-                HAM.setSelected(true);
-                break;
-            case "Build Your Own":
-                crustField.setText("Hand-tossed");
-                selectedToppingsCount = 0;
-                break;
-        }
     }
 
+    /**
+     * Sets the options for a Deluxe pizza.
+     */
+    private void setDeluxeOptions() {
+        crustField.setText("Brooklyn");
+        SAUSAGE.setSelected(true);
+        PEPPERONI.setSelected(true);
+        GREEN_PEPPER.setSelected(true);
+        ONION.setSelected(true);
+        MUSHROOM.setSelected(true);
+    }
+
+    /**
+     * Sets the options for a BBQ Chicken pizza.
+     */
+    private void setBBQChickenOptions() {
+        crustField.setText("Thin");
+        BBQ_CHICKEN.setSelected(true);
+        GREEN_PEPPER.setSelected(true);
+        PROVOLONE.setSelected(true);
+        CHEDDAR.setSelected(true);
+    }
+
+    /**
+     * Sets the options for a Meatzza pizza.
+     */
+    private void setMeatzzaOptions() {
+        crustField.setText("Hand-tossed");
+        SAUSAGE.setSelected(true);
+        PEPPERONI.setSelected(true);
+        BEEF.setSelected(true);
+        HAM.setSelected(true);
+    }
+
+    /**
+     * Sets the options for a Build Your Own pizza.
+     */
+    private void setBuildYourOwnOptions() {
+        crustField.setText("Hand-tossed");
+        selectedToppingsCount = 0;
+    }
+
+    /**
+     * Enables or disables topping selection based on customization option.
+     * @param lock True to disable toppings, false to enable.
+     */
     private void lockToppings(boolean lock) {
         SAUSAGE.setDisable(lock);
         PEPPERONI.setDisable(lock);
@@ -145,6 +200,9 @@ public class NyPizzaViewController {
         BACON.setDisable(lock);
     }
 
+    /**
+     * Sets up listeners for each topping button.
+     */
     private void setupToppingListeners() {
         setupToppingListener(SAUSAGE);
         setupToppingListener(PEPPERONI);
@@ -162,6 +220,10 @@ public class NyPizzaViewController {
         setupToppingListener(BACON);
     }
 
+    /**
+     * Adds a listener to a topping button for selection count control.
+     * @param toppingButton The topping button to set up.
+     */
     private void setupToppingListener(RadioButton toppingButton) {
         toppingButton.setOnAction(event -> {
             if (toppingButton.isSelected()) {
@@ -179,6 +241,11 @@ public class NyPizzaViewController {
         });
     }
 
+    /**
+     * Displays an alert with the specified title and content.
+     * @param title   The title of the alert.
+     * @param content The message content of the alert.
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle(title);
@@ -187,6 +254,9 @@ public class NyPizzaViewController {
         alert.showAndWait();
     }
 
+    /**
+     * Updates the displayed pizza price based on selected options.
+     */
     private void updatePizzaPrice() {
         String selectedType = choose_type.getValue();
         RadioButton selectedSizeButton = (RadioButton) sizeGroup.getSelectedToggle();
@@ -199,7 +269,12 @@ public class NyPizzaViewController {
         pizza_price.setText(String.format("%.2f", totalPrice));
     }
 
-
+    /**
+     * Calculates the base price of the pizza based on type and size.
+     * @param type The type of pizza.
+     * @param size The size of the pizza.
+     * @return The base price.
+     */
     private double calculateBasePrice(String type, String size) {
         switch (type) {
             case "Deluxe":
@@ -215,11 +290,24 @@ public class NyPizzaViewController {
         }
     }
 
-
+    /**
+     * Adds the selected pizza to the current order.
+     */
     @FXML
     private void addOrder() {
-        Pizza pizza = null;
+        Pizza pizza = createPizza();
+        setPizzaSize(pizza);
+        addPizzaToOrder(pizza);
+        showOrderConfirmation();
+    }
+
+    /**
+     * Creates a pizza based on the selected type and toppings.
+     * @return The created pizza.
+     */
+    private Pizza createPizza() {
         PizzaFactory pizzaFactory = new NYPizza();
+        Pizza pizza;
 
         switch (choose_type.getValue()) {
             case "Deluxe":
@@ -235,8 +323,17 @@ public class NyPizzaViewController {
                 pizza = pizzaFactory.createBuildYourOwn();
                 addCustomToppings((BuildYourOwn) pizza);
                 break;
+            default:
+                throw new IllegalArgumentException("Invalid pizza type selected");
         }
+        return pizza;
+    }
 
+    /**
+     * Sets the size of the pizza.
+     * @param pizza The pizza whose size is being set.
+     */
+    private void setPizzaSize(Pizza pizza) {
         String selectedSize = ((RadioButton) sizeGroup.getSelectedToggle()).getText();
 
         switch (selectedSize) {
@@ -255,9 +352,20 @@ public class NyPizzaViewController {
             default:
                 throw new IllegalStateException("Unexpected size: " + selectedSize);
         }
+    }
 
+    /**
+     * Adds the created pizza to the current order.
+     * @param pizza The pizza to add.
+     */
+    private void addPizzaToOrder(Pizza pizza) {
         OrderManager.addOrderToCurrentOrder(pizza);
+    }
 
+    /**
+     * Displays a confirmation alert when an order is added.
+     */
+    private void showOrderConfirmation() {
         int orderNumber = OrderManager.getCurrentOrderNumber();
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Order Confirmation");
@@ -266,6 +374,10 @@ public class NyPizzaViewController {
         alert.showAndWait();
     }
 
+    /**
+     * Adds selected toppings to the "Build Your Own" pizza.
+     * @param pizza The pizza to add toppings to.
+     */
     private void addCustomToppings(BuildYourOwn pizza) {
         if (SAUSAGE.isSelected()) pizza.addTopping(Topping.SAUSAGE);
         if (PEPPERONI.isSelected()) pizza.addTopping(Topping.PEPPERONI);
@@ -282,11 +394,15 @@ public class NyPizzaViewController {
         if (PINEAPPLE.isSelected()) pizza.addTopping(Topping.PINEAPPLE);
         if (BACON.isSelected()) pizza.addTopping(Topping.BACON);
 
-        if (pizza.getToppings().size() > 7) {
-            pizza.removeTopping(pizza.getToppings().get(7));
+        if (pizza.getToppings().size() > MAX_TOPPINGS) {
+            pizza.removeTopping(pizza.getToppings().get(MAX_TOPPINGS));
         }
     }
 
+    /**
+     * Updates the pizza image displayed based on the selected pizza type.
+     * @param pizzaType The selected type of pizza.
+     */
     private void updatePizzaImage(String pizzaType) {
         Image image = null;
         switch (pizzaType) {
@@ -306,8 +422,6 @@ public class NyPizzaViewController {
 
         if (image != null) {
             ny_pic.setImage(image);
-        } else {
         }
     }
-
 }

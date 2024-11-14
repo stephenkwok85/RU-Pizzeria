@@ -18,6 +18,14 @@ import pizzeria_package.Size;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * Controller class for managing the Chicago-style pizza order view in the application.
+ * This class handles user interactions, including selecting pizza types, sizes, and toppings.
+ * It updates the view to reflect choices and calculates the total price based on the selections.
+ * Additionally, it manages the addition of pizzas to the current order and displays order confirmations.
+ *
+ * @author Stephen Kwok and Jeongtae Kim
+ */
 public class ChicagoPizzaViewController {
 
     private static final double TOPPING_PRICE = 1.69;
@@ -59,6 +67,9 @@ public class ChicagoPizzaViewController {
     private boolean isCustomizable = false;
     private int selectedToppingsCount = 0;
 
+    /**
+     * Initializes the pizza view with default settings and listeners.
+     */
     @FXML
     public void initialize() {
         updatePizzaImage("Build Your Own");
@@ -83,6 +94,10 @@ public class ChicagoPizzaViewController {
         updatePizzaPrice();
     }
 
+    /**
+     * Sets pizza options based on the selected pizza type.
+     * @param pizzaType The selected pizza type.
+     */
     private void setPizzaOptions(String pizzaType) {
         crustField.clear();
         resetToppingSelections();
@@ -107,12 +122,19 @@ public class ChicagoPizzaViewController {
         }
     }
 
+    /**
+     * Selects the given toppings.
+     * @param toppings Array of RadioButtons representing toppings to be selected.
+     */
     private void selectToppings(RadioButton... toppings) {
         for (RadioButton topping : toppings) {
             topping.setSelected(true);
         }
     }
 
+    /**
+     * Resets all topping selections to unselected.
+     */
     private void resetToppingSelections() {
         SAUSAGE.setSelected(false);
         PEPPERONI.setSelected(false);
@@ -130,6 +152,10 @@ public class ChicagoPizzaViewController {
         BACON.setSelected(false);
     }
 
+    /**
+     * Enables or disables topping selections based on the customization option.
+     * @param lock True to lock toppings, false to unlock.
+     */
     private void lockToppings(boolean lock) {
         SAUSAGE.setDisable(lock);
         PEPPERONI.setDisable(lock);
@@ -147,6 +173,9 @@ public class ChicagoPizzaViewController {
         BACON.setDisable(lock);
     }
 
+    /**
+     * Sets up listeners for each topping button to update the price based on selection.
+     */
     private void setupToppingListeners() {
         setupToppingListener(SAUSAGE);
         setupToppingListener(PEPPERONI);
@@ -164,6 +193,10 @@ public class ChicagoPizzaViewController {
         setupToppingListener(BACON);
     }
 
+    /**
+     * Adds a listener to a topping button to manage selection limits.
+     * @param toppingButton The topping button to monitor.
+     */
     private void setupToppingListener(RadioButton toppingButton) {
         toppingButton.setOnAction(event -> {
             if (toppingButton.isSelected()) {
@@ -181,6 +214,11 @@ public class ChicagoPizzaViewController {
         });
     }
 
+    /**
+     * Displays an alert with a specified title and message content.
+     * @param title   The alert title.
+     * @param content The alert message content.
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle(title);
@@ -189,6 +227,9 @@ public class ChicagoPizzaViewController {
         alert.showAndWait();
     }
 
+    /**
+     * Updates the displayed price of the pizza based on type, size, and toppings.
+     */
     private void updatePizzaPrice() {
         String selectedType = choose_type.getValue();
         RadioButton selectedSizeButton = (RadioButton) sizeGroup.getSelectedToggle();
@@ -201,6 +242,12 @@ public class ChicagoPizzaViewController {
         pizza_price.setText(String.format("%.2f", totalPrice));
     }
 
+    /**
+     * Calculates the base price of the pizza based on its type and size.
+     * @param type The type of pizza.
+     * @param size The size of the pizza.
+     * @return The base price of the pizza.
+     */
     private double calculateBasePrice(String type, String size) {
         switch (type) {
             case "Deluxe":
@@ -216,10 +263,24 @@ public class ChicagoPizzaViewController {
         }
     }
 
+    /**
+     * Adds the selected pizza to the current order.
+     */
     @FXML
     private void addOrder() {
-        Pizza pizza = null;
+        Pizza pizza = createPizza();
+        setPizzaSize(pizza);
+        addPizzaToOrder(pizza);
+        showOrderConfirmation();
+    }
+
+    /**
+     * Creates a pizza based on the selected type and toppings.
+     * @return The created pizza.
+     */
+    private Pizza createPizza() {
         PizzaFactory pizzaFactory = new ChicagoPizza();
+        Pizza pizza;
 
         switch (choose_type.getValue()) {
             case "Deluxe":
@@ -235,8 +296,17 @@ public class ChicagoPizzaViewController {
                 pizza = pizzaFactory.createBuildYourOwn();
                 addCustomToppings((BuildYourOwn) pizza);
                 break;
+            default:
+                throw new IllegalArgumentException("Invalid pizza type selected");
         }
+        return pizza;
+    }
 
+    /**
+     * Sets the size of the pizza.
+     * @param pizza The pizza whose size is being set.
+     */
+    private void setPizzaSize(Pizza pizza) {
         String selectedSize = ((RadioButton) sizeGroup.getSelectedToggle()).getText();
 
         switch (selectedSize) {
@@ -255,9 +325,20 @@ public class ChicagoPizzaViewController {
             default:
                 throw new IllegalStateException("Unexpected size: " + selectedSize);
         }
+    }
 
+    /**
+     * Adds the created pizza to the current order.
+     * @param pizza The pizza to add.
+     */
+    private void addPizzaToOrder(Pizza pizza) {
         OrderManager.addOrderToCurrentOrder(pizza);
+    }
 
+    /**
+     * Displays an order confirmation alert.
+     */
+    private void showOrderConfirmation() {
         int orderNumber = OrderManager.getCurrentOrderNumber();
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Order Confirmation");
@@ -266,6 +347,10 @@ public class ChicagoPizzaViewController {
         alert.showAndWait();
     }
 
+    /**
+     * Adds selected toppings to the "Build Your Own" pizza.
+     * @param pizza The pizza to add toppings to.
+     */
     private void addCustomToppings(BuildYourOwn pizza) {
         if (SAUSAGE.isSelected()) pizza.addTopping(Topping.SAUSAGE);
         if (PEPPERONI.isSelected()) pizza.addTopping(Topping.PEPPERONI);
@@ -287,6 +372,10 @@ public class ChicagoPizzaViewController {
         }
     }
 
+    /**
+     * Updates the pizza image based on the selected pizza type.
+     * @param pizzaType The selected pizza type.
+     */
     private void updatePizzaImage(String pizzaType) {
         Image image = null;
         switch (pizzaType) {
@@ -306,7 +395,6 @@ public class ChicagoPizzaViewController {
 
         if (image != null) {
             ch_pic.setImage(image);
-        } else {
         }
     }
 }

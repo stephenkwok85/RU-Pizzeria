@@ -1,7 +1,20 @@
 package pizzeria_package;
 import java.util.List;
 
-public class ChicagoPizza implements PizzaFactory{
+/**
+ * Factory class for creating various types of Chicago-style pizzas.
+ * Implements the {@code PizzaFactory} interface to produce different
+ * Chicago-style pizzas with specific crusts and toppings.
+ *
+ * author Stephen Kwok and Jeongtae Kim
+ */
+public class ChicagoPizza implements PizzaFactory {
+
+    /**
+     * Creates a Chicago-style Deluxe pizza with deep dish crust and preset toppings.
+     *
+     * @return A new Chicago-style Deluxe pizza.
+     */
     @Override
     public Pizza createDeluxe() {
         Pizza chicagoDeluxe = new Deluxe("Chicago", Crust.DEEP_DISH);
@@ -11,6 +24,11 @@ public class ChicagoPizza implements PizzaFactory{
         return chicagoDeluxe;
     }
 
+    /**
+     * Creates a Chicago-style Meatzza pizza with stuffed crust and preset toppings.
+     *
+     * @return A new Chicago-style Meatzza pizza.
+     */
     @Override
     public Pizza createMeatzza() {
         Pizza chicagoMeatzza = new Meatzza("Chicago", Crust.STUFFED);
@@ -20,6 +38,11 @@ public class ChicagoPizza implements PizzaFactory{
         return chicagoMeatzza;
     }
 
+    /**
+     * Creates a Chicago-style BBQ Chicken pizza with pan crust and preset toppings.
+     *
+     * @return A new Chicago-style BBQ Chicken pizza.
+     */
     @Override
     public Pizza createBBQChicken() {
         Pizza chicagoBBQ = new BBQChicken("Chicago", Crust.PAN);
@@ -29,6 +52,12 @@ public class ChicagoPizza implements PizzaFactory{
         return chicagoBBQ;
     }
 
+    /**
+     * Creates a Chicago-style Build Your Own pizza with pan crust.
+     * This pizza has no toppings by default and allows for customization.
+     *
+     * @return A new Chicago-style Build Your Own pizza.
+     */
     @Override
     public Pizza createBuildYourOwn() {
         Pizza chicagoBuildYourOwn = new BuildYourOwn("Chicago", Crust.PAN);

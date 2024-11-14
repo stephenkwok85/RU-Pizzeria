@@ -16,6 +16,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Controller class for managing the view of placed orders. This class allows
+ * users to view details of placed orders, cancel orders, and export order details
+ * to a text file. It also displays the total cost of an order including tax.
+ *
+ * @author Stephen Kwok and Jeongtae Kim
+ */
 public class PlacedOrderViewController {
 
     private static final double TAX_RATE = 0.06625;
@@ -40,6 +47,9 @@ public class PlacedOrderViewController {
 
     private ObservableList<String> pizzaDetailsList = FXCollections.observableArrayList();
 
+    /**
+     * Initializes the placed order view and sets up event handlers for buttons.
+     */
     @FXML
     private void initialize() {
         cancel_order_button.setOnAction(event -> cancelOrder());
@@ -49,56 +59,88 @@ public class PlacedOrderViewController {
         placed_order_number_selection.setOnAction(event -> showOrderDetails());
     }
 
+    /**
+     * Refreshes the list of placed orders in the ComboBox.
+     */
     private void refreshPlacedOrders() {
         placed_order_number_selection.getItems().clear();
-
         List<Integer> placedOrderNumbers = OrderManager.getPlacedOrderNumbers();
         placed_order_number_selection.getItems().addAll(placedOrderNumbers);
     }
 
+    /**
+     * Displays the details of the selected order, including pizza details
+     * and the total order cost.
+     */
     private void showOrderDetails() {
         Integer orderNum = placed_order_number_selection.getValue();
         if (orderNum != null) {
             List<Pizza> pizzas = OrderManager.getPlacedOrder(orderNum);
 
             if (pizzas != null && !pizzas.isEmpty()) {
-                pizzaDetailsList.clear();
-                double subtotal = 0.0;
-                StringBuilder toppings = new StringBuilder();
-
-                int pizzaNumber = 1;
-                for (Pizza pizza : pizzas) {
-                    pizzaDetailsList.add("Pizza " + pizzaNumber++);
-                    pizzaDetailsList.add("Category: " + pizza.getClass().getSimpleName());
-                    pizzaDetailsList.add("Style: " + pizza.getStyle());
-                    pizzaDetailsList.add("Size: " + pizza.getSize());
-                    pizzaDetailsList.add("Crust: " + pizza.getCrust().toString());
-                    pizzaDetailsList.add("Price: $" + pizza.price());
-
-                    toppings.setLength(0);
-                    for (Topping topping : pizza.getToppings()) {
-                        toppings.append(topping.toString()).append(", ");
-                    }
-                    if (toppings.length() > 0) {
-                        toppings.setLength(toppings.length() - 2);
-                    }
-                    pizzaDetailsList.add("Toppings: " + toppings.toString());
-                    pizzaDetailsList.add("");
-
-                    subtotal += pizza.price();
-                }
-
-                placed_order_list.setItems(pizzaDetailsList);
-
-                double tax = subtotal * TAX_RATE;
-                double total = subtotal + tax;
-                order_total.setText(String.format("%.2f", total));
+                displayPizzaDetails(pizzas);
+                calculateAndDisplayTotal(pizzas);
             } else {
                 showAlert(ERROR_TITLE, "Order not found.");
             }
         }
     }
 
+    /**
+     * Displays the list of pizzas and their details for a given order.
+     * @param pizzas List of pizzas in the selected order.
+     */
+    private void displayPizzaDetails(List<Pizza> pizzas) {
+        pizzaDetailsList.clear();
+        int pizzaNumber = 1;
+
+        for (Pizza pizza : pizzas) {
+            pizzaDetailsList.add("Pizza " + pizzaNumber++);
+            pizzaDetailsList.add("Category: " + pizza.getClass().getSimpleName());
+            pizzaDetailsList.add("Style: " + pizza.getStyle());
+            pizzaDetailsList.add("Size: " + pizza.getSize());
+            pizzaDetailsList.add("Crust: " + pizza.getCrust().toString());
+            pizzaDetailsList.add("Price: $" + pizza.price());
+            pizzaDetailsList.add("Toppings: " + getToppingsString(pizza));
+            pizzaDetailsList.add("");
+        }
+
+        placed_order_list.setItems(pizzaDetailsList);
+    }
+
+    /**
+     * Retrieves the toppings of a pizza as a formatted string.
+     * @param pizza The pizza whose toppings are being formatted.
+     * @return A comma-separated string of toppings.
+     */
+    private String getToppingsString(Pizza pizza) {
+        StringBuilder toppings = new StringBuilder();
+        for (Topping topping : pizza.getToppings()) {
+            toppings.append(topping.toString()).append(", ");
+        }
+        if (toppings.length() > 0) {
+            toppings.setLength(toppings.length() - 2);
+        }
+        return toppings.toString();
+    }
+
+    /**
+     * Calculates and displays the total cost of the order, including tax.
+     * @param pizzas List of pizzas in the selected order.
+     */
+    private void calculateAndDisplayTotal(List<Pizza> pizzas) {
+        double subtotal = 0.0;
+        for (Pizza pizza : pizzas) {
+            subtotal += pizza.price();
+        }
+        double tax = subtotal * TAX_RATE;
+        double total = subtotal + tax;
+        order_total.setText(String.format("%.2f", total));
+    }
+
+    /**
+     * Cancels the selected placed order and removes it from the list of placed orders.
+     */
     private void cancelOrder() {
         Integer orderNum = placed_order_number_selection.getValue();
         if (orderNum != null) {
@@ -117,6 +159,9 @@ public class PlacedOrderViewController {
         }
     }
 
+    /**
+     * Exports the details of all placed orders to a text file.
+     */
     private void exportOrders() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (Integer orderNum : OrderManager.getPlacedOrderNumbers()) {
@@ -153,6 +198,11 @@ public class PlacedOrderViewController {
         }
     }
 
+    /**
+     * Displays an alert with the specified title and content.
+     * @param title   The title of the alert dialog.
+     * @param content The message content of the alert dialog.
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
