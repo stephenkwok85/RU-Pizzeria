@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Represents a "Build Your Own" pizza that allows the customer to add custom toppings.
  * This class calculates the price based on the size of the pizza and the number of toppings.
  *
- * author Stephen Kwok and Jeongtae Kim
+ * @author Stephen Kwok and Jeongtae Kim
  */
 public class BuildYourOwn extends Pizza {
 

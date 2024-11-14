@@ -6,7 +6,7 @@ import java.util.List;
  * Represents a Meatzza pizza with a predefined set of meat toppings and crust.
  * This class provides the price of the pizza based on its size.
  *
- * author Stephen Kwok and Jeongtae Kim
+ * @author Stephen Kwok and Jeongtae Kim
  */
 public class Meatzza extends Pizza {
 

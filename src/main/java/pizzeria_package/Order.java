@@ -8,7 +8,7 @@ import java.util.List;
  * can be marked as placed, and provides methods for adding and removing pizzas, calculating
  * totals, and displaying order details.
  *
- * author Stephen Kwok and Jeongtae Kim
+ * @author Stephen Kwok and Jeongtae Kim
  */
 public class Order {
     private static int orderCounter = 1;

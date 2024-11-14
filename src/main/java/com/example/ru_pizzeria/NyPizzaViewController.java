@@ -95,6 +95,7 @@ public class NyPizzaViewController {
 
     /**
      * Sets pizza options based on the selected pizza type.
+     *
      * @param pizzaType The type of pizza selected.
      */
     private void setPizzaOptions(String pizzaType) {
@@ -181,6 +182,7 @@ public class NyPizzaViewController {
 
     /**
      * Enables or disables topping selection based on customization option.
+     *
      * @param lock True to disable toppings, false to enable.
      */
     private void lockToppings(boolean lock) {
@@ -222,6 +224,7 @@ public class NyPizzaViewController {
 
     /**
      * Adds a listener to a topping button for selection count control.
+     *
      * @param toppingButton The topping button to set up.
      */
     private void setupToppingListener(RadioButton toppingButton) {
@@ -243,6 +246,7 @@ public class NyPizzaViewController {
 
     /**
      * Displays an alert with the specified title and content.
+     *
      * @param title   The title of the alert.
      * @param content The message content of the alert.
      */
@@ -271,6 +275,7 @@ public class NyPizzaViewController {
 
     /**
      * Calculates the base price of the pizza based on type and size.
+     *
      * @param type The type of pizza.
      * @param size The size of the pizza.
      * @return The base price.
@@ -303,6 +308,7 @@ public class NyPizzaViewController {
 
     /**
      * Creates a pizza based on the selected type and toppings.
+     *
      * @return The created pizza.
      */
     private Pizza createPizza() {
@@ -331,6 +337,7 @@ public class NyPizzaViewController {
 
     /**
      * Sets the size of the pizza.
+     *
      * @param pizza The pizza whose size is being set.
      */
     private void setPizzaSize(Pizza pizza) {
@@ -376,6 +383,7 @@ public class NyPizzaViewController {
 
     /**
      * Adds selected toppings to the "Build Your Own" pizza.
+     *
      * @param pizza The pizza to add toppings to.
      */
     private void addCustomToppings(BuildYourOwn pizza) {
@@ -401,6 +409,7 @@ public class NyPizzaViewController {
 
     /**
      * Updates the pizza image displayed based on the selected pizza type.
+     *
      * @param pizzaType The selected type of pizza.
      */
     private void updatePizzaImage(String pizzaType) {

@@ -11,7 +11,7 @@ import java.io.IOException;
  * Main entry point for the RU Pizzeria application. This class initializes
  * the primary stage and loads the main view for the application.
  *
- * author Stephen Kwok and Jeongtae Kim
+ * @author Stephen Kwok and Jeongtae Kim
  */
 public class RUPizzeriaMain extends Application {
     @Override

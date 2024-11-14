@@ -96,6 +96,7 @@ public class ChicagoPizzaViewController {
 
     /**
      * Sets pizza options based on the selected pizza type.
+     *
      * @param pizzaType The selected pizza type.
      */
     private void setPizzaOptions(String pizzaType) {
@@ -124,6 +125,7 @@ public class ChicagoPizzaViewController {
 
     /**
      * Selects the given toppings.
+     *
      * @param toppings Array of RadioButtons representing toppings to be selected.
      */
     private void selectToppings(RadioButton... toppings) {
@@ -154,6 +156,7 @@ public class ChicagoPizzaViewController {
 
     /**
      * Enables or disables topping selections based on the customization option.
+     *
      * @param lock True to lock toppings, false to unlock.
      */
     private void lockToppings(boolean lock) {
@@ -195,6 +198,7 @@ public class ChicagoPizzaViewController {
 
     /**
      * Adds a listener to a topping button to manage selection limits.
+     *
      * @param toppingButton The topping button to monitor.
      */
     private void setupToppingListener(RadioButton toppingButton) {
@@ -216,6 +220,7 @@ public class ChicagoPizzaViewController {
 
     /**
      * Displays an alert with a specified title and message content.
+     *
      * @param title   The alert title.
      * @param content The alert message content.
      */
@@ -244,6 +249,7 @@ public class ChicagoPizzaViewController {
 
     /**
      * Calculates the base price of the pizza based on its type and size.
+     *
      * @param type The type of pizza.
      * @param size The size of the pizza.
      * @return The base price of the pizza.
@@ -304,6 +310,7 @@ public class ChicagoPizzaViewController {
 
     /**
      * Sets the size of the pizza.
+     *
      * @param pizza The pizza whose size is being set.
      */
     private void setPizzaSize(Pizza pizza) {
@@ -329,6 +336,7 @@ public class ChicagoPizzaViewController {
 
     /**
      * Adds the created pizza to the current order.
+     *
      * @param pizza The pizza to add.
      */
     private void addPizzaToOrder(Pizza pizza) {
@@ -349,6 +357,7 @@ public class ChicagoPizzaViewController {
 
     /**
      * Adds selected toppings to the "Build Your Own" pizza.
+     *
      * @param pizza The pizza to add toppings to.
      */
     private void addCustomToppings(BuildYourOwn pizza) {
@@ -374,6 +383,7 @@ public class ChicagoPizzaViewController {
 
     /**
      * Updates the pizza image based on the selected pizza type.
+     *
      * @param pizzaType The selected pizza type.
      */
     private void updatePizzaImage(String pizzaType) {

@@ -6,7 +6,7 @@ import java.util.List;
  * Implements the {@code PizzaFactory} interface to produce different
  * NY-style pizzas with specific crusts and toppings.
  *
- * author Stephen Kwok and Jeongtae Kim
+ * @author Stephen Kwok and Jeongtae Kim
  */
 public class NYPizza implements PizzaFactory {
 

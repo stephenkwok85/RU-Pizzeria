@@ -8,7 +8,7 @@ import java.util.List;
  * including its toppings, crust, size, and style. Subclasses are required to
  * implement the {@code price} method to provide specific pricing based on pizza type.
  *
- * author Stephen Kwok and Jeongtae Kim
+ * @author Stephen Kwok and Jeongtae Kim
  */
 public abstract class Pizza {
     private ArrayList<Topping> toppings;

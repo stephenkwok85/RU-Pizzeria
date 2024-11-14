@@ -88,6 +88,7 @@ public class PlacedOrderViewController {
 
     /**
      * Displays the list of pizzas and their details for a given order.
+     *
      * @param pizzas List of pizzas in the selected order.
      */
     private void displayPizzaDetails(List<Pizza> pizzas) {
@@ -110,6 +111,7 @@ public class PlacedOrderViewController {
 
     /**
      * Retrieves the toppings of a pizza as a formatted string.
+     *
      * @param pizza The pizza whose toppings are being formatted.
      * @return A comma-separated string of toppings.
      */
@@ -126,6 +128,7 @@ public class PlacedOrderViewController {
 
     /**
      * Calculates and displays the total cost of the order, including tax.
+     *
      * @param pizzas List of pizzas in the selected order.
      */
     private void calculateAndDisplayTotal(List<Pizza> pizzas) {
@@ -200,6 +203,7 @@ public class PlacedOrderViewController {
 
     /**
      * Displays an alert with the specified title and content.
+     *
      * @param title   The title of the alert dialog.
      * @param content The message content of the alert dialog.
      */
