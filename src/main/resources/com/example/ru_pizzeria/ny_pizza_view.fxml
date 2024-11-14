@@ -67,7 +67,7 @@
         </GridPane>
         <Button fx:id="add_order_button" layoutX="362.0" layoutY="439.0" mnemonicParsing="false" onAction="#addOrder" prefHeight="22.0" prefWidth="114.0" text="Add to Order" />
         <Label layoutX="314.0" layoutY="391.0" prefHeight="22.0" prefWidth="80.0" text="Pizza Price: $" />
-        <TextField fx:id="pizza_price" layoutX="388.0" layoutY="391.0" />
+        <TextField fx:id="pizza_price" editable="false" layoutX="388.0" layoutY="391.0" />
         <TextField fx:id="crustField" editable="false" layoutX="114.0" layoutY="159.0" prefHeight="22.0" prefWidth="150.0" />
     </children>
 </Pane>
