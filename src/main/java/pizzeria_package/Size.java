@@ -1,9 +1,10 @@
 package pizzeria_package;
 
 /**
- * The Size enum represents the available sizes for a pizza.
- * Each constant defines a distinct pizza size, allowing for variation in portion and price.
+ * Enumeration representing the different pizza sizes.
+ * Each size affects the portion and pricing of the pizza.
  *
+ * author Stephen Kwok and Jeongtae Kim
  */
 public enum Size {
     SMALL,

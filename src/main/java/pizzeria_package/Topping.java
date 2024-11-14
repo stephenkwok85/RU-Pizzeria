@@ -1,8 +1,10 @@
 package pizzeria_package;
 
 /**
- * The Topping enum represents the various toppings that can be added to a pizza.
+ * Enumeration representing various pizza toppings. Each topping
+ * can be added to customize a pizza order.
  *
+ * author Stephen Kwok and Jeongtae Kim
  */
 public enum Topping {
     SAUSAGE,
@@ -21,9 +23,11 @@ public enum Topping {
     BACON;
 
     /**
-     * Overrides the default toString() method to provide a user-friendly format for each enum value.
+     * Returns a formatted string representation of the topping.
+     * Converts the enum name to lowercase and capitalizes the first letter,
+     * replacing underscores with spaces (e.g., "GREEN_PEPPER" becomes "Green pepper").
      *
-     * @return A formatted string representation of the enum constant name.
+     * @return A formatted string representation of the topping.
      */
     @Override
     public String toString() {

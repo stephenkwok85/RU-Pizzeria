@@ -1,9 +1,10 @@
 package pizzeria_package;
 
 /**
- * The Crust enum represents the various types of crusts available for a pizza.
- * Each constant in this enum defines a specific style of crust that a pizza can have.
+ * Enumeration representing the different types of pizza crusts.
+ * Each crust type corresponds to a specific style of pizza.
  *
+ * author Stephen Kwok and Jeongtae Kim
  */
 public enum Crust {
     DEEP_DISH,
