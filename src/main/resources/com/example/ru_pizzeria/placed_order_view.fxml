@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ru_pizzeria.PlacedOrderViewController">
    <children>
       <Label layoutX="178.0" layoutY="14.0" prefHeight="61.0" prefWidth="251.0" text="Placed Order">
@@ -19,7 +18,7 @@
       <Label layoutX="55.0" layoutY="80.0" prefHeight="22.0" prefWidth="84.0" text="Order Number" />
       <ComboBox fx:id="placed_order_number_selection" layoutX="139.0" layoutY="80.0" prefHeight="22.0" prefWidth="102.0" />
       <Label layoutX="275.0" layoutY="80.0" prefHeight="22.0" prefWidth="153.0" text="Order total (Tax included): $" />
-      <TextField fx:id="order_total" layoutX="428.0" layoutY="80.0" prefHeight="22.0" prefWidth="102.0" />
+      <TextField fx:id="order_total" editable="false" layoutX="428.0" layoutY="80.0" prefHeight="22.0" prefWidth="102.0" />
       <ListView fx:id="placed_order_list" layoutX="22.0" layoutY="111.0" prefHeight="242.0" prefWidth="559.0" />
       <Button fx:id="cancel_order_button" layoutX="121.0" layoutY="364.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="139.0" text="Cancel Order" />
       <Button fx:id="export_order_button" layoutX="357.0" layoutY="364.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="139.0" text="Export Order" />

@@ -79,30 +79,6 @@ public class OrderManager {
     }
 
     /**
-     * Gets the next available order number.
-     *
-     * @return The next order number.
-     */
-    public static int getNextOrderNumber() {
-        return nextOrderNumber;
-    }
-
-    /**
-     * Deletes an unplaced order by order number.
-     *
-     * @param orderNumber The order number to delete.
-     * @return True if the order was deleted, false if the order is placed or doesn't exist.
-     */
-    public static boolean deleteOrder(int orderNumber) {
-        Order order = orders.get(orderNumber);
-        if (order != null && !order.isPlaced()) {
-            orders.remove(orderNumber);
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Deletes a placed order by order number.
      *
      * @param orderNum The order number to delete.
@@ -130,15 +106,6 @@ public class OrderManager {
                 order.addPizza(pizza);
             }
         }
-    }
-
-    /**
-     * Gets a list of all order numbers.
-     *
-     * @return A list of all order numbers.
-     */
-    public static List<Integer> getAllOrderNumbers() {
-        return new ArrayList<>(orders.keySet());
     }
 
     /**

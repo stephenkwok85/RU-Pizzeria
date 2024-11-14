@@ -50,17 +50,11 @@ public class ChicagoPizzaViewController {
     @FXML
     private RadioButton s_size;
     @FXML
-    private RadioButton m_size;
-    @FXML
-    private RadioButton l_size;
-    @FXML
     private ToggleGroup sizeGroup;
     @FXML
     private RadioButton SAUSAGE, PEPPERONI, GREEN_PEPPER, ONION, MUSHROOM, BBQ_CHICKEN, BEEF, HAM, PROVOLONE, CHEDDAR, OLIVES, SPINACH, PINEAPPLE, BACON;
     @FXML
     private TextField pizza_price;
-    @FXML
-    private Button add_order_button;
     @FXML
     private ImageView ch_pic;
 

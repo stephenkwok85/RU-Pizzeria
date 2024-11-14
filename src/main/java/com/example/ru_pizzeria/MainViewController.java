@@ -33,17 +33,11 @@ public class MainViewController {
     private Button chicago_button;
 
     @FXML
-    private ImageView nyPizzaImage;
-    @FXML
     private ImageView nyPizzaButtonImage;
 
     @FXML
     private ImageView chicagoPizzaButtonImage;
 
-    @FXML
-    private ImageView ordersPlacedImage;
-    @FXML
-    private ImageView currentOrderImage;
 
     /**
      * Initializes the main view with images for each button
